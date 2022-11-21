@@ -34,11 +34,13 @@ public class PlaceObject : MonoBehaviour
         Ray ray = c.ScreenPointToRay(Input.mousePosition);                                                  // Ray original position/direction = from camera to mouse on screen position
         RaycastHit hit = new RaycastHit();                                                                  // New variable to store information on raycast hit (position, object etc.)
         LayerMask g0LayerMask = LayerMask.GetMask("Ground0");
+        LayerMask g1LayerMask = LayerMask.GetMask("Ground1");
         LayerMask placedLayerMask = LayerMask.GetMask("PlacedObject");
         if (Physics.Raycast(ray, out hit, rayDistance, g0LayerMask))
         {
-            if(Physics.CheckSphere(CalculatePosition(hit), 0.1f, placedLayerMask))                          // Returns true if another collision box overlaps with
-            {                                                                                               // checking sphere, ignoring PlacedObject layer
+            if(Physics.CheckSphere(CalculatePosition(hit), 0.1f, placedLayerMask)                           // Returns true if another collision box overlaps with 
+                && Physics.CheckSphere(CalculatePosition(hit), 0.1f, g1LayerMask))                          // checking sphere on PlacedObject or ground1 layer
+            { 
                 Debug.Log("Object Detected");
             }
             else 
