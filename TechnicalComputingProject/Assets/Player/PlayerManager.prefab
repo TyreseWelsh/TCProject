@@ -44,4 +44,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a6af8a445dbb8443bf516cd41e3b044, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  objectToPlace: {fileID: 8060644101629746653, guid: 844e48a7f4cb8a645857f0fd4360ed47, type: 3}
+  placementZone: {fileID: 9200010459509264046, guid: 844e48a7f4cb8a645857f0fd4360ed47, type: 3}
+  objectToPlace: {fileID: 2903747040396281152, guid: d9594e9402eb4134c9948a2d45a2672c, type: 3}
+  c: {fileID: 0}

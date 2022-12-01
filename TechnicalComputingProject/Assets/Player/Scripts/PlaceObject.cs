@@ -26,28 +26,32 @@ public class PlaceObject : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        DisplayPlacementZone();
+        Ray ray = c.ScreenPointToRay(Input.mousePosition);                                                                 // Ray original position/direction = from camera to mouse on screen position
+        RaycastHit hit = new RaycastHit();                                                                                 // New variable to store information on raycast hit (position, object etc.)
 
-        if (Input.GetMouseButtonDown(0))                                                                     // If left mouse button is clicked
+        LayerMask g0LayerMask = LayerMask.GetMask("Floor");
+        LayerMask g1LayerMask = LayerMask.GetMask("Environment");
+        LayerMask placedLayerMask = LayerMask.GetMask("PlacedObject");
+
+        DisplayPlacementZone(ray, hit, g0LayerMask, g1LayerMask, placedLayerMask);
+
+        if (Input.GetMouseButtonDown(0))                                                                                    // If left mouse button is clicked
         {
-            SpawnObject(objectToPlace);                                                                      // Spawn Object to block path
+            SpawnObject(objectToPlace, ray, hit, g0LayerMask, g1LayerMask, placedLayerMask);                                // Spawn Object to block path
+        }
+        else if(Input.GetMouseButtonDown(1))
+        {
+            DeleteObject(ray, hit, placedLayerMask);
         }
     }
 
     // Function to display location where player will place object
-    void DisplayPlacementZone()
+    void DisplayPlacementZone(Ray ray, RaycastHit hit, LayerMask g0LayerMask, LayerMask g1LayerMask, LayerMask placedLayerMask)
     {
-        Ray ray = c.ScreenPointToRay(Input.mousePosition);                                                             // Ray original position/direction = from camera to mouse on screen position
-        RaycastHit hit = new RaycastHit();                                                                             // New variable to store information on raycast hit (position, object etc.)
-
-        LayerMask g0LayerMask = LayerMask.GetMask("Ground0");
-        LayerMask g1LayerMask = LayerMask.GetMask("Ground1");
-        LayerMask placedLayerMask = LayerMask.GetMask("PlacedObject");
-
         if (Physics.Raycast(ray, out hit, rayDistance, g0LayerMask))
         {
             if (Physics.CheckSphere(CalculatePosition(hit), 0.1f, placedLayerMask)                           // Returns true if another collision box overlaps with
-                || Physics.CheckSphere(CalculatePosition(hit), 0.1f, g1LayerMask))                          // checking sphere on PlacedObject or ground1 layer
+                || Physics.CheckSphere(CalculatePosition(hit), 0.1f, g1LayerMask))                           // checking sphere on PlacedObject or ground1 layer
             {
                 placementZoneObj.SetActive(false);
             }
@@ -65,15 +69,8 @@ public class PlaceObject : MonoBehaviour
     }
 
     // Function to get point in world space to place object using mouse position
-    void SpawnObject(GameObject objectToSpawn)
+    void SpawnObject(GameObject objectToSpawn, Ray ray, RaycastHit hit, LayerMask g0LayerMask, LayerMask g1LayerMask, LayerMask placedLayerMask)
     {
-        Ray ray = c.ScreenPointToRay(Input.mousePosition);                                                             // Ray original position/direction = from camera to mouse on screen position
-        RaycastHit hit = new RaycastHit();                                                                             // New variable to store information on raycast hit (position, object etc.)
-
-        LayerMask g0LayerMask = LayerMask.GetMask("Ground0");
-        LayerMask g1LayerMask = LayerMask.GetMask("Ground1");
-        LayerMask placedLayerMask = LayerMask.GetMask("PlacedObject");
-
         if (Physics.Raycast(ray, out hit, rayDistance, g0LayerMask))
         {
             if(Physics.CheckSphere(CalculatePosition(hit), 0.1f, placedLayerMask)                           // Returns true if another collision box overlaps with
@@ -94,6 +91,15 @@ public class PlaceObject : MonoBehaviour
         float newXPos = (float)Math.Round(hit.point.x, MidpointRounding.AwayFromZero);                      // Rounding hit positions to nearest even whole number (using AwayFromZero)
         float newZPos = (float)Math.Round(hit.point.z, MidpointRounding.AwayFromZero);
 
-        return new Vector3(newXPos, 1.0f, newZPos);                                             // Returning new vector3 containing position to place new object
+        return new Vector3(newXPos, 1.0f, newZPos);                                                         // Returning new vector3 containing position to place new object
+    }
+
+    // Function to delete object placed by player
+    void DeleteObject(Ray ray, RaycastHit hit, LayerMask placedLayerMask)
+    {
+        if(Physics.Raycast(ray, out hit, rayDistance, placedLayerMask))
+        {
+            Destroy(hit.collider.gameObject);
+        }
     }
 }

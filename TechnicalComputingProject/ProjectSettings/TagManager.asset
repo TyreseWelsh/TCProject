@@ -11,8 +11,8 @@ TagManager:
   - 
   - Water
   - UI
-  - Ground0
-  - Ground1
+  - Floor
+  - Environment
   - PlacedObject
   - 
   - 
