@@ -99,11 +99,7 @@ public class NodeGrid : MonoBehaviour
                 }
             }
         }
-        //Debug.Log(node.gridXPos + "," + node.gridYPos);
-        //for(int i = 0; i < neighbours.Capacity; i++)
-        //{
-        //    Debug.Log(neighbours[i].gridXPos +","+ neighbours[i].gridYPos);
-        //}
+
         return neighbours;
     }
 
