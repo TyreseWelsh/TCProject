@@ -1,44 +1,36 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Diagnostics;
 
 public class Pathfinding : MonoBehaviour
 {
     public NodeGrid nodeGrid;
     public Transform AISeekerTf;
     public Transform targetTf;
-    bool once = true;
 
-    private void Awake()
-    {
-        
-    }
-
-    private void Start()
-    {
-        //FindPath(AISeekerTf.position, targetTf.position);
-    }
     // Update is called once per frame
     void Update()
     {
-        //if (once)
-        //{
-        if (nodeGrid.gridLSize.x > 0 && nodeGrid.gridLSize.y > 0)
+        if (Input.GetKeyDown(KeyCode.N))                                                                                                 // Update Grid when Key is pressed
         {
-            //once = false;
-            FindPath(AISeekerTf.position, targetTf.position);
+            if (nodeGrid.gridLSize.x > 0 && nodeGrid.gridLSize.y > 0)
+            {
+                FindPath(AISeekerTf.position, targetTf.position);
+            }
         }
-        //}
     }
 
     void FindPath(Vector3 startPos, Vector3 endPos)
     {
+        Stopwatch sw = new Stopwatch();
+        sw.Start();
         Node startNode = nodeGrid.NodeFromWorldPoint(startPos);
         startNode.gCost = 0;
         Node endNode = nodeGrid.NodeFromWorldPoint(endPos);
 
 
-        List<Node> openSet = new List<Node>();                                                                              // Creating list to store open nodes
+        List<Node> openSet = new List<Node>(nodeGrid.MaxSize);                                                                              // Creating list to store open nodes
         List<Node> closedSet = new List<Node>();
         openSet.Add(startNode);
 
@@ -61,7 +53,8 @@ public class Pathfinding : MonoBehaviour
 
             if (currentNode.id == endNode.id)                                                                                     // Have found the target node
             {
-                
+                sw.Stop();
+                print("Path found in: " + sw.ElapsedMilliseconds + " ms");
                 RetracePath(startNode, endNode);
                 return;
             }
@@ -106,7 +99,6 @@ public class Pathfinding : MonoBehaviour
         path.Add(currentNode);
         path.Reverse();                                                                                                     // Reverse path to get path from start node to end node
 
-        Debug.Log("Path count: " + path.Count);
         nodeGrid.path = path;
     }
 

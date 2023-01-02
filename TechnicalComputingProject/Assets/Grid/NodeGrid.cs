@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class NodeGrid : MonoBehaviour
 {
+    public bool drawAllGizmos = true;
     LayerMask environmentMask;
     LayerMask placedObjMask;
     public Vector2 gridWSize;                                                                                                       // Grid size in world
@@ -15,12 +16,6 @@ public class NodeGrid : MonoBehaviour
 
     public List<Node> path;
 
-    private void Awake()
-    {
-        //environmentMask = LayerMask.GetMask("Environment");
-        //placedObjMask = LayerMask.GetMask("PlacedObject");
-        //CreateGrid();
-    }
 
     // Start is called before the first frame update
     void Start()
@@ -32,9 +27,14 @@ public class NodeGrid : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.N))                                                                                                 // Update Grid when Key is pressed
-        {
             CreateGrid();
+    }
+
+    public int MaxSize
+    {
+        get
+        {
+            return gridLSize.x * gridLSize.y;
         }
     }
 
@@ -56,7 +56,7 @@ public class NodeGrid : MonoBehaviour
                 worldPoint = wBottomLeft + Vector3.right * (x * nodeSize + (nodeSize / 2))                                            // World position of node in grid
                     + Vector3.forward * (y * nodeSize + (nodeSize / 2));
 
-                bool walkable = !(Physics.CheckSphere(worldPoint, (nodeSize / 2 - nodeSize / 3), environmentMask | placedObjMask));          // Setting if the current node is walkable or not using collisions
+                bool walkable = !(Physics.CheckSphere(worldPoint, (nodeSize / 2 - nodeSize / 3), environmentMask | placedObjMask));          // Setting if the current node is walkable or not using collisions      
                 grid[x, y] = new Node(nodeID, walkable, worldPoint, x, y);                                                                            // Create a new node at this index with the right variables
                 nodeID++;
             }
@@ -108,29 +108,44 @@ public class NodeGrid : MonoBehaviour
     {
         Gizmos.DrawWireCube(transform.position, new Vector3(gridWSize.x, 1, gridWSize.y));                                              // Creating the basic grid shape
 
-        if (grid != null)                                                                                                                // Checking if grid is valid
+        if(drawAllGizmos == false)                                                                                                      // Only draw path gizmos if drawAllGizmos = false
         {
-            Node AINode = NodeFromWorldPoint(AIChar.position);
-
-            foreach (Node node in grid)
+            if (path != null)
             {
-                Gizmos.color = (node.walkable) ? Color.green : Color.red;                                                               // Setting colour of cubes to show if walkable or not
-                
-                if(path != null)
+                foreach (Node node in path)
                 {
-                    if(path.Exists(x => x.id == node.id))
-                    {
-                        Gizmos.color = Color.magenta;
-                    }
-                }
-                
-                if (AINode.nodeWPosition == node.nodeWPosition)
-                {
-                    Gizmos.DrawWireCube(node.nodeWPosition, Vector3.one * (nodeSize - 0.1f));
-                    Gizmos.color = Color.cyan;
-                }
-                Gizmos.DrawWireCube(node.nodeWPosition, Vector3.one * (nodeSize - 0.1f));                                               // Drawing the cubes with small gap inbetween
+                    Gizmos.color = Color.magenta;
+                    Gizmos.DrawWireCube(node.nodeWPosition, Vector3.one * (nodeSize - 0.1f));                                               // Drawing the cubes with small gap inbetween
 
+                }
+            }
+        }
+        else                                                                                                                                // Draw all gizmos if drawAllGizmos is true
+        {
+            if (grid != null)                                                                                                                // Checking if grid is valid
+            {
+                Node AINode = NodeFromWorldPoint(AIChar.position);
+
+                foreach (Node node in grid)
+                {
+                    Gizmos.color = (node.walkable) ? Color.green : Color.red;                                                               // Setting colour of cubes to show if walkable or not
+
+                    if (path != null)
+                    {
+                        if (path.Exists(x => x.id == node.id))
+                        {
+                            Gizmos.color = Color.magenta;
+                        }
+                    }
+
+                    if (AINode.nodeWPosition == node.nodeWPosition)
+                    {
+                        Gizmos.DrawWireCube(node.nodeWPosition, Vector3.one * (nodeSize - 0.1f));
+                        Gizmos.color = Color.cyan;
+                    }
+                    Gizmos.DrawWireCube(node.nodeWPosition, Vector3.one * (nodeSize - 0.1f));                                               // Drawing the cubes with small gap inbetween
+
+                }
             }
         }
     }
