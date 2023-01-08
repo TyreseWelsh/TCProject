@@ -16,6 +16,13 @@ public class PlaceObject : MonoBehaviour
     int rayDistance = 300;
 
     private GameObject placementZoneObj;
+    public GameObject nodeGrid;
+    NodeGrid nodeGridScript;
+
+    private void Awake()
+    {
+        nodeGridScript = nodeGrid.GetComponent<NodeGrid>();
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -81,6 +88,7 @@ public class PlaceObject : MonoBehaviour
             else 
             {
                 Instantiate(objectToSpawn, CalculatePosition(hit), Quaternion.identity);                    // Create object at ray hit x/z position with y=1 to be above ground
+                nodeGridScript.CreateGrid();
             }
         }
     }

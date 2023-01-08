@@ -9,25 +9,26 @@ public class NodeGrid : MonoBehaviour
     LayerMask environmentMask;
     LayerMask placedObjMask;
     public Vector2 gridWSize;                                                                                                       // Grid size in world
-    Node [,] grid;
+    public Node [,] grid;
     public float nodeSize;
     public Vector2Int gridLSize = new Vector2Int(0, 0);                                                                                    // Grid local size
     public Transform AIChar;
 
     public List<Node> path;
 
-
     // Start is called before the first frame update
     void Start()
     {
         environmentMask = LayerMask.GetMask("Environment");
         placedObjMask = LayerMask.GetMask("PlacedObject");
+
+        CreateGrid();
     }
 
     // Update is called once per frame
     void Update()
     {
-            CreateGrid();
+            //CreateGrid();
     }
 
     public int MaxSize
@@ -39,7 +40,7 @@ public class NodeGrid : MonoBehaviour
     }
 
     // Function to create/update grid for pathfinding
-    void CreateGrid()
+    public void CreateGrid()
     {
         int nodeID = 0;
         gridLSize.x = (int)Math.Round(gridWSize.x / nodeSize);
@@ -92,7 +93,7 @@ public class NodeGrid : MonoBehaviour
                 }
                 float checkXPos = node.gridXPos + x;                                                                                   // Checking/getting position of surrounding nodes
                 float checkYPos = node.gridYPos + y;                                                                                   //
-                //Debug.Log("x= " + checkXPos + "y= " + checkYPos);
+
                 if(checkXPos >=0 && checkXPos < gridLSize.x && checkYPos >= 0 && checkYPos < gridLSize.y)                          // Checking if node is actually inside of grid
                 {
                     neighbours.Add(grid[Mathf.FloorToInt(Mathf.Min(checkXPos)), Mathf.FloorToInt(Mathf.Min(checkYPos))]);                                      // Add valid node to neighbours list
@@ -108,19 +109,19 @@ public class NodeGrid : MonoBehaviour
     {
         Gizmos.DrawWireCube(transform.position, new Vector3(gridWSize.x, 1, gridWSize.y));                                              // Creating the basic grid shape
 
-        if(drawAllGizmos == false)                                                                                                      // Only draw path gizmos if drawAllGizmos = false
-        {
-            if (path != null)
-            {
-                foreach (Node node in path)
-                {
-                    Gizmos.color = Color.magenta;
-                    Gizmos.DrawWireCube(node.nodeWPosition, Vector3.one * (nodeSize - 0.1f));                                               // Drawing the cubes with small gap inbetween
+        //if (drawAllGizmos == false)                                                                                                      // Only draw path gizmos if drawAllGizmos = false
+        //{
+        //    if (path != null)
+        //    {
+        //        foreach (Node node in path)
+        //        {
+        //            Gizmos.color = Color.magenta;
+        //            Gizmos.DrawWireCube(node.nodeWPosition, Vector3.one * (nodeSize - 0.1f));                                               // Drawing the cubes with small gap inbetween
 
-                }
-            }
-        }
-        else                                                                                                                                // Draw all gizmos if drawAllGizmos is true
+        //        }
+        //    }
+        //}
+        if (drawAllGizmos == true)                                                                                                           // Draw all gizmos if drawAllGizmos is true
         {
             if (grid != null)                                                                                                                // Checking if grid is valid
             {
@@ -130,13 +131,13 @@ public class NodeGrid : MonoBehaviour
                 {
                     Gizmos.color = (node.walkable) ? Color.green : Color.red;                                                               // Setting colour of cubes to show if walkable or not
 
-                    if (path != null)
-                    {
-                        if (path.Exists(x => x.id == node.id))
-                        {
-                            Gizmos.color = Color.magenta;
-                        }
-                    }
+                    //if (path != null)
+                    //{
+                    //    if (path.Exists(x => x.id == node.id))
+                    //    {
+                    //        Gizmos.color = Color.magenta;
+                    //    }
+                    //}
 
                     if (AINode.nodeWPosition == node.nodeWPosition)
                     {
