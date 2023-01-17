@@ -87,7 +87,7 @@ public class NodeGrid : MonoBehaviour
         {                                                                                                                               // using nodeSize to get the distance between the center of each
             for (float y = -1; y <= 1; y++)                                                                                             //
             {                                                                                                                           //
-                if(x == 0 && y == 0)                                                                                                    // If x and y = 0 then its checking center (current) node
+                if((x == 0 && y == 0) || (x == 1 && y == 1) || (x == -1 && y == -1) || (x == -1 && y == 1) || (x == 1 && y == -1))                                                                                                    // If x and y = 0 then its checking center (current) node
                 {
                     continue;
                 }

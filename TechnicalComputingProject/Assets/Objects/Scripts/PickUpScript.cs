@@ -4,15 +4,15 @@ using UnityEngine;
 
 public class PickUpScript : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    private int score = 0;
 
-    // Update is called once per frame
-    void Update()
+    private void OnTriggerEnter(Collider other)
     {
-        
+        if (other.gameObject.CompareTag("PickUp"))
+        {
+            score++;
+            print(score);
+            other.gameObject.SetActive(false);
+        }
     }
 }

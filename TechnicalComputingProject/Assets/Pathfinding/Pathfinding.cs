@@ -154,7 +154,7 @@ public class Pathfinding : MonoBehaviour
         waypointList.Add(path[0].nodeWPosition);
 
 
-        for (int i = 1; i < path.Count - 1; i++)
+        for (int i = 1; i < path.Count-1; i++)
         {
 
             Vector2 newDirection = new Vector2(path[i + 1].gridXPos - path[i].gridXPos, path[i + 1].gridYPos - path[i].gridYPos);
@@ -162,21 +162,21 @@ public class Pathfinding : MonoBehaviour
 
             if (newDirection != oldDirection)
             {
-                waypointList.Add(path[i].nodeWPosition);
+                waypointList.Add(path[i-1].nodeWPosition);
             }
 
 
             //Vector2 directionNew = new Vector2(path[i - 1].gridXPos - path[i].gridXPos, path[i - 1].gridYPos - path[i].gridYPos);   // Gets a vector2 representing the current direction the unit is moving
             //if (directionNew != directionOld)                                                                                        // If the current direction is different to old direction
             //{
-            //    waypointList.Add(path[i].nodeWPosition);                                                                            // Add a new waypoint to list
+            //    waypointList.Add(path[i-1].nodeWPosition);                                                                            // Add a new waypoint to list
             //}
             //directionOld = directionNew;                                                                                            // Setting old direction to current direction to compare with future directions
 
-            //if (i == path.Count - 1 && directionOld != new Vector2(path[i].gridXPos, path[i].gridYPos) - new Vector2(startNode.gridXPos, startNode.gridYPos))
-            //{
-            //    waypointList.Add(path[path.Count - 1].nodeWPosition);
-            //}
+            if (i == path.Count - 1 && oldDirection != new Vector2(path[i].gridXPos, path[i].gridYPos) - new Vector2(startNode.gridXPos, startNode.gridYPos))
+            {
+                waypointList.Add(path[path.Count-1].nodeWPosition);
+            }
         }
         //waypointList.Add(path[path.Count - 1].nodeWPosition);
         return waypointList.ToArray();

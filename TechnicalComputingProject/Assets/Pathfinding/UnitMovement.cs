@@ -31,7 +31,7 @@ public class UnitMovement : MonoBehaviour
     {
         if(pathSuccessful)
         {
-            path= newPath;
+            path = newPath;
             StopCoroutine("FollowPath");
             StartCoroutine("FollowPath");
         }
