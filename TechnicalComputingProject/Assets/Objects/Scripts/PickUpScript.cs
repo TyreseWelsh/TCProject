@@ -4,14 +4,13 @@ using UnityEngine;
 
 public class PickUpScript : MonoBehaviour
 {
-    private int score = 0;
+    public UIManager uiManager;
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("PickUp"))
         {
-            score++;
-            print(score);
+            uiManager.SetScore(50);
             other.gameObject.SetActive(false);
         }
     }

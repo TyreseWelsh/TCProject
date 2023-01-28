@@ -15,16 +15,28 @@ public class UnitMovement : MonoBehaviour
     public GameObject nodeGridObj;
     NodeGrid nodeGridScript;
 
+
     private void Awake()
     {
         nodeGridScript = nodeGridObj.GetComponent<NodeGrid>();
     }
+
+    private void Start()
+    {
+        GetPath();
+    }
     private void Update()
     {
-        if(nodeGridScript.gridLSize.x > 0 && nodeGridScript.gridLSize.y > 0)
-        {
-            PathRequestManager.RequestPath(transform.position, target.position, OnPathFound);
-        }
+        //if((nodeGridScript.gridLSize.x > 0 && nodeGridScript.gridLSize.y > 0) & on == true)
+        //{
+        //    on = false;
+        //    PathRequestManager.RequestPath(transform.position, target.position, OnPathFound);
+        //}
+    }
+
+    public void GetPath()
+    {
+        PathRequestManager.RequestPath(transform.position, target.position, OnPathFound);
     }
 
     public void OnPathFound(Vector3[] newPath, bool pathSuccessful)
@@ -39,10 +51,13 @@ public class UnitMovement : MonoBehaviour
 
     IEnumerator FollowPath()
     {
+        print("once");
         Vector3 currentWaypoint = path[0];
         while(true)
         {
-            if(transform.position == currentWaypoint)
+            //print("unit: " + transform.position + " w: " + currentWaypoint);
+            
+            if (transform.position == currentWaypoint)
             {
                 targetIndex++;
                 if(targetIndex >= path.Length)
@@ -53,11 +68,11 @@ public class UnitMovement : MonoBehaviour
                 }
 
                 currentWaypoint = path[targetIndex];
-                //print(currentWaypoint.x + " " + currentWaypoint.y + " " + currentWaypoint.z);
+                print(currentWaypoint.x + " " + currentWaypoint.y + " " + currentWaypoint.z);
             }
-            
-            //print(currentWaypoint);
+
             transform.position = Vector3.MoveTowards(transform.position, currentWaypoint, speed * Time.deltaTime);
+
             yield return null;
         }
     }

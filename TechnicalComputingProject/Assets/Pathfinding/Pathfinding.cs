@@ -157,7 +157,7 @@ public class Pathfinding : MonoBehaviour
         for (int i = 1; i < path.Count-1; i++)
         {
 
-            Vector2 newDirection = new Vector2(path[i + 1].gridXPos - path[i].gridXPos, path[i + 1].gridYPos - path[i].gridYPos);
+            Vector2 newDirection = new Vector2(path[i].gridXPos - path[i].gridXPos, path[i].gridYPos - path[i].gridYPos);
             Vector2 oldDirection = new Vector2(path[i].gridXPos - path[i - 1].gridXPos, path[i].gridYPos - path[i - 1].gridYPos);
 
             if (newDirection != oldDirection)

@@ -17,7 +17,7 @@ public class NodeGrid : MonoBehaviour
     public List<Node> path;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         environmentMask = LayerMask.GetMask("Environment");
         placedObjMask = LayerMask.GetMask("PlacedObject");
