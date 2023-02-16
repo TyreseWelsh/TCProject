@@ -8,7 +8,7 @@ using System;
 public class UnitMovement : MonoBehaviour
 {
     public Transform target;
-    float speed = 1;
+    [SerializeField] float speed;
     Vector3[] path;
     int targetIndex;
 
