@@ -11334,6 +11334,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 1735055730}
+  speed: 4.33
   nodeGridObj: {fileID: 2019023806}
 --- !u!4 &1863597709
 Transform:
