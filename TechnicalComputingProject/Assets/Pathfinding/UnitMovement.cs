@@ -23,7 +23,19 @@ public class UnitMovement : MonoBehaviour
 
     private void Start()
     {
-        GetPath();
+        switch(nodeGridScript.currentPathFindingType)
+        {
+            case (NodeGrid.PathfindingType.AStar):
+                UnityEngine.Debug.Log("Following A*");
+                GetPath();
+                break;
+
+            case (NodeGrid.PathfindingType.FlowField):
+                UnityEngine.Debug.Log("Following flow field");
+                StopCoroutine("FollowFlowField");
+                StartCoroutine("FollowFlowField");
+                break;
+        }
     }
     private void Update()
     {
@@ -44,12 +56,43 @@ public class UnitMovement : MonoBehaviour
         if(pathSuccessful)
         {
             path = newPath;
-            StopCoroutine("FollowPath");
-            StartCoroutine("FollowPath");
+            StopCoroutine("FollowDirectPath");
+            StartCoroutine("FollowDirectPath");
         }
     }
 
-    IEnumerator FollowPath()
+    IEnumerator FollowFlowField()
+    {
+        Node currentNode = nodeGridScript.NodeFromWorldPoint(transform.position);
+        Node endNode = nodeGridScript.NodeFromWorldPoint(nodeGridScript.flowTargetTransform.position);
+
+        while (currentNode.id != endNode.id)
+        {
+            Node nextNode = nodeGridScript.GetNeighbours(currentNode)[0];
+            foreach(Node neighbourNode in nodeGridScript.GetNeighbours(currentNode))
+            {
+                    if (neighbourNode.gCost < nextNode.gCost)
+                    {
+                        nextNode = neighbourNode;
+                    }
+            }
+
+            if (transform.position == nextNode.nodeWPosition)
+            {
+                currentNode = nextNode;
+            }
+            //Debug.Log("Next node pos: " + nextNode.nodeWPosition);
+            Debug.Log("Current node pos: " + currentNode.nodeWPosition);
+
+            transform.position = Vector3.MoveTowards(transform.position, nextNode.nodeWPosition, speed * Time.deltaTime);
+
+            yield return null;
+        }
+
+
+    }
+
+    IEnumerator FollowDirectPath()
     {
         print("once");
         Vector3 currentWaypoint = path[0];

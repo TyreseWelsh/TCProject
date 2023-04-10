@@ -6,6 +6,7 @@ using static UnityEngine.GraphicsBuffer;
 using System.Linq;
 using System;
 using System.IO;
+//using UnityEditor.Experimental.GraphView;
 
 public class Pathfinding : MonoBehaviour
 {
@@ -33,11 +34,11 @@ public class Pathfinding : MonoBehaviour
     //}
 
     public void StartFindPath(Vector3 startPos, Vector3 targetPos)
-    {
-        StartCoroutine(FindPath(startPos, targetPos));
+    {                                                                                                                      // A* Pathfinding (Individual)
+        StartCoroutine(FindDirectPath(startPos, targetPos));
     }
 
-    IEnumerator FindPath(Vector3 startPos, Vector3 endPos)
+    IEnumerator FindDirectPath(Vector3 startPos, Vector3 endPos)
     {
         Stopwatch sw = new Stopwatch();
         sw.Start();
@@ -90,13 +91,15 @@ public class Pathfinding : MonoBehaviour
                         continue;
                     }
 
-                    int newMovementCostToNeighbour = currentNode.gCost + GetDistance(currentNode, neighbourNode);               // Distance/cost from current node to neighbour node to
+                    int newMovementCostToNeighbour = currentNode.gCost + nodeGrid.GetDistance(currentNode, neighbourNode);               // Distance/cost from current node to neighbour node to
                                                                                                                                 // calculate costs for new neighbour node
                     if (newMovementCostToNeighbour < neighbourNode.gCost || !openSet.Contains(neighbourNode))     // Checking if new neighbour G cost is less than its current cost to see if it needs
                     {                                                                                                           // to be reduced or is not in the open list (not already going to be checked)
                         neighbourNode.gCost = newMovementCostToNeighbour;                                                       // Set current G cost to new G cost (better path from start node found)
-                        neighbourNode.hCost = GetDistance(neighbourNode, endNode);                                              // Set H cost as distance to end node
+                        neighbourNode.hCost = nodeGrid.GetDistance(neighbourNode, endNode);                                              // Set H cost as distance to end node
                         neighbourNode.parentNode = currentNode;                                                                 // Setting parent node to look back on
+
+                        // FOR FLOW FIELD PROB ADD SOMETHING AROUND HERE STORING NODES + COSTs + PARENT NODE
 
                         if (!openSet.Contains(neighbourNode))
                         {
@@ -180,21 +183,5 @@ public class Pathfinding : MonoBehaviour
         }
         //waypointList.Add(path[path.Count - 1].nodeWPosition);
         return waypointList.ToArray();
-    }
-
-    int GetDistance(Node nodeA, Node nodeB)
-    {
-        int dstX = Mathf.Abs(nodeA.gridXPos - nodeB.gridXPos);
-        int dstY = Mathf.Abs(nodeA.gridYPos - nodeB.gridYPos);
-
-        // Diagonal distance to get on same horizontal/vertical line as end node always = lower distance
-        // so then rest of the distance == highest distance - lowest distance
-        // (Multiplying by 14 for diagonal and 10 for non diagonal (1.4*10 , 1.0*10)
-        if(dstX > dstY)                                                                                                 // If Y distance to end node < X distance,
-        {
-            return 14 * dstY + 10 * (dstX - dstY);
-        }
-
-        return 14 * dstX + 10 * (dstY - dstX);
     }
 }
