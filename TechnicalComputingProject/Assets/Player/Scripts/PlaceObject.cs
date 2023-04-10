@@ -95,7 +95,7 @@ public class PlaceObject : MonoBehaviour
                 Instantiate(objectToSpawn, CalculatePosition(hit), Quaternion.identity);                    // Create object at ray hit x/z position with y=1 to be above ground
                 nodeGridScript.CreateGrid();
                 unitMovementScript.GetPath();
-                uiManager.SetScore(-20);
+                uiManager.SetScore(-10);
             }
         }
     }

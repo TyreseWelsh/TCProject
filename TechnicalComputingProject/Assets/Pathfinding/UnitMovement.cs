@@ -23,19 +23,7 @@ public class UnitMovement : MonoBehaviour
 
     private void Start()
     {
-        switch(nodeGridScript.currentPathFindingType)
-        {
-            case (NodeGrid.PathfindingType.AStar):
-                UnityEngine.Debug.Log("Following A*");
-                GetPath();
-                break;
-
-            case (NodeGrid.PathfindingType.FlowField):
-                UnityEngine.Debug.Log("Following flow field");
-                StopCoroutine("FollowFlowField");
-                StartCoroutine("FollowFlowField");
-                break;
-        }
+        GetPath();
     }
     private void Update()
     {
@@ -48,7 +36,19 @@ public class UnitMovement : MonoBehaviour
 
     public void GetPath()
     {
-        PathRequestManager.RequestPath(transform.position, target.position, OnPathFound);
+        switch (nodeGridScript.currentPathFindingType)
+        {
+            case (NodeGrid.PathfindingType.AStar):
+                UnityEngine.Debug.Log("Following A*");
+                PathRequestManager.RequestPath(transform.position, target.position, OnPathFound);
+                break;
+
+            case (NodeGrid.PathfindingType.FlowField):
+                UnityEngine.Debug.Log("Following flow field");
+                StopCoroutine("FollowFlowField");
+                StartCoroutine("FollowFlowField");
+                break;
+        }
     }
 
     public void OnPathFound(Vector3[] newPath, bool pathSuccessful)
@@ -64,6 +64,7 @@ public class UnitMovement : MonoBehaviour
     IEnumerator FollowFlowField()
     {
         Node currentNode = nodeGridScript.NodeFromWorldPoint(transform.position);
+        //Debug.Log(currentNode.nodeWPosition);
         Node endNode = nodeGridScript.NodeFromWorldPoint(nodeGridScript.flowTargetTransform.position);
 
         while (currentNode.id != endNode.id)
@@ -82,7 +83,7 @@ public class UnitMovement : MonoBehaviour
                 currentNode = nextNode;
             }
             //Debug.Log("Next node pos: " + nextNode.nodeWPosition);
-            Debug.Log("Current node pos: " + currentNode.nodeWPosition);
+            //Debug.Log("Current node pos: " + currentNode.nodeWPosition);
 
             transform.position = Vector3.MoveTowards(transform.position, nextNode.nodeWPosition, speed * Time.deltaTime);
 

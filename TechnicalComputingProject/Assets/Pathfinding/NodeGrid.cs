@@ -40,12 +40,6 @@ public class NodeGrid : MonoBehaviour
         placedObjMask = LayerMask.GetMask("PlacedObject");
 
         CreateGrid();
-
-        if(currentPathFindingType == PathfindingType.FlowField)
-        {
-            UnityEngine.Debug.Log("Flow Field Pathfinding");
-            CreateFlowField(flowTargetTransform.position);
-        }
     }
 
     // Update is called once per frame
@@ -84,6 +78,12 @@ public class NodeGrid : MonoBehaviour
                 grid[x, y] = new Node(nodeID, walkable, worldPoint, x, y);                                                                            // Create a new node at this index with the right variables
                 nodeID++;
             }
+        }
+
+        if(currentPathFindingType == PathfindingType.FlowField)
+        {
+            UnityEngine.Debug.Log("Flow Field Pathfinding");
+            CreateFlowField(flowTargetTransform.position);
         }
     }
 
