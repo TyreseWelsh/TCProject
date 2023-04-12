@@ -25,7 +25,7 @@ public class TurretController : MonoBehaviour
     [SerializeField]
     GameObject basicProjectile;
     [SerializeField]
-    [Tooltip("0 = Basic")]
+    [Tooltip("0 = None, 1 = Basic")]
     int projectileType;
     [SerializeField]
     float projectileSpeed;
@@ -61,32 +61,33 @@ public class TurretController : MonoBehaviour
                     switch (projectileType)
                     {
                         case (0):
+                            if (!fired)                                                                         // No projectile
+                            {
+                                switch(turretType)
+                                {
+                                    case (TurretType.Instant):
+                                        if (targetsInRange.Count > 0)
+                                        {
+                                            StartCoroutine(InstantAttack());
+                                        }
+                                        else
+                                        {
+                                            StopCoroutine(InstantAttack());
+                                        }
+                                        break;
+                                }
+                            }
+                            break;
+                        case (1):                                                                               // Basic projectile
                             if (!fired)
                             {
-                                if(targetsInRange.Count > 0)
+                                if (targetsInRange.Count > 0)
                                 {
                                     StartCoroutine(BasicAttack());
                                 }
                                 else
                                 {
                                     StopCoroutine(BasicAttack());
-                                }
-                            }
-                            break;
-                        case (1):
-                            // Slowing turret, do nothing
-                            break;
-                        case (2):
-                            // Will be instant damage turret
-                            if (!fired)
-                            {
-                                if (targetsInRange.Count > 0)
-                                {
-                                    StartCoroutine(InstantAttack());
-                                }
-                                else
-                                {
-                                    StopCoroutine(InstantAttack());
                                 }
                             }
                             break;
