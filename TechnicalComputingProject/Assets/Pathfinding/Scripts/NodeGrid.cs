@@ -262,7 +262,7 @@ public class NodeGrid : MonoBehaviour
         {
             if (grid != null)                                                                                                                // Checking if grid is valid
             {
-                Node AINode = NodeFromWorldPoint(AIChar.position);
+                //Node AINode = NodeFromWorldPoint(AIChar.position);
 
                 foreach (Node node in grid)
                 {
@@ -276,11 +276,11 @@ public class NodeGrid : MonoBehaviour
                     //    }
                     //}
 
-                    if (AINode.nodeWPosition == node.nodeWPosition)
-                    {
-                        Gizmos.DrawWireCube(node.nodeWPosition, Vector3.one * (nodeSize - 0.1f));
-                        Gizmos.color = Color.cyan;
-                    }
+                    //if (AINode.nodeWPosition == node.nodeWPosition)
+                    //{
+                    //    Gizmos.DrawWireCube(node.nodeWPosition, Vector3.one * (nodeSize - 0.1f));
+                    //    Gizmos.color = Color.cyan;
+                    //}
                     Gizmos.DrawWireCube(node.nodeWPosition, Vector3.one * (nodeSize - 0.1f));                                               // Drawing the cubes with small gap inbetween
 
                     if (currentPathFindingType == PathfindingType.FlowField && node.walkable && flowFieldCreated)

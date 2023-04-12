@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class TurretController : MonoBehaviour
 {
-    enum TurretType
+    public enum TurretType
     {
         Basic,
         Instant,
@@ -47,20 +47,61 @@ public class TurretController : MonoBehaviour
     {
         if(targetsInRange.Count > 0) 
         {
-            targetTransform = targetsInRange[0].transform;
-
-            switch(projectileType)
+            foreach (GameObject target in targetsInRange)
             {
-                case (0):
-                    if(!fired)
+                if (target == null)
+                {
+                    targetsInRange.Remove(target);
+                    break;
+                }
+                if (targetsInRange.Count > 0)                                                   // Checking if targets in range is still more than 0
+                {
+                    targetTransform = targetsInRange[0].transform;
+
+                    switch (projectileType)
                     {
-                        StartCoroutine(BasicAttack());
+                        case (0):
+                            if (!fired)
+                            {
+                                if(targetsInRange.Count > 0)
+                                {
+                                    StartCoroutine(BasicAttack());
+                                }
+                                else
+                                {
+                                    StopCoroutine(BasicAttack());
+                                }
+                            }
+                            break;
+                        case (1):
+                            // Slowing turret, do nothing
+                            break;
+                        case (2):
+                            // Will be instant damage turret
+                            if (!fired)
+                            {
+                                if (targetsInRange.Count > 0)
+                                {
+                                    StartCoroutine(InstantAttack());
+                                }
+                                else
+                                {
+                                    StopCoroutine(InstantAttack());
+                                }
+                            }
+                            break;
+                        default:
+                            break;
                     }
-                    break;
-                default:
-                    break;
+                }
             }
         }
+        
+    }
+
+    public TurretType GetTurretType()
+    {
+        return turretType;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -81,10 +122,33 @@ public class TurretController : MonoBehaviour
         fired = true;
         yield return new WaitForSeconds(fireRate);
 
-        GameObject newProjectile = Instantiate(basicProjectile, projectileSpawn.transform.position, Quaternion.identity);
-        TurretProjectile projectileScript = newProjectile.GetComponent<TurretProjectile>();
-        projectileScript.Init(projectileType, projectileSpeed, projectileSpawn.transform.position, targetTransform.position);
-        fired = false;
+        if(targetsInRange.Count > 0)
+        {
+            GameObject newProjectile = Instantiate(basicProjectile, projectileSpawn.transform.position, Quaternion.identity);
+            TurretProjectile projectileScript = newProjectile.GetComponent<TurretProjectile>();
+            projectileScript.Init(projectileType, projectileSpeed, projectileSpawn.transform.position, targetTransform.position);
+            fired = false;
+        }
+    }
+
+    IEnumerator InstantAttack()
+    {
+        fired = true;
+        yield return new WaitForSeconds(fireRate);
+
+        if (targetsInRange.Count > 0)
+        {
+            foreach (GameObject target in targetsInRange)
+            {
+                UnitScript unitScript = target.GetComponent<UnitScript>();
+                if(unitScript is IDamageable)
+                {
+                    unitScript.TakeDamage(2);
+                }
+            }
+            print("Instant Damage!");
+            fired = false;
+        }
     }
 
     bool InRange(GameObject other)

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
 public class TurretProjectile : MonoBehaviour
 {
@@ -44,6 +45,13 @@ public class TurretProjectile : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        Destroy(gameObject);
+        if(collision.gameObject.CompareTag("Unit"))
+        {
+            UnitScript unitScript = collision.gameObject.GetComponent<UnitScript>();
+            if (unitScript is IDamageable)
+            {
+                unitScript.TakeDamage(5);
+            }
+        }
     }
 }

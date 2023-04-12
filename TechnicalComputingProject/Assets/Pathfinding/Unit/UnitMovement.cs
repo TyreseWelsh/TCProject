@@ -95,7 +95,6 @@ public class UnitMovement : MonoBehaviour
 
     IEnumerator FollowDirectPath()
     {
-        print("once");
         Vector3 currentWaypoint = path[0];
         while(true)
         {
@@ -112,12 +111,36 @@ public class UnitMovement : MonoBehaviour
                 }
 
                 currentWaypoint = path[targetIndex];
-                print(currentWaypoint.x + " " + currentWaypoint.y + " " + currentWaypoint.z);
+                //print(currentWaypoint.x + " " + currentWaypoint.y + " " + currentWaypoint.z);
             }
 
             transform.position = Vector3.MoveTowards(transform.position, currentWaypoint, speed * Time.deltaTime);
 
             yield return null;
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.CompareTag("Turret"))
+        {
+            TurretController turretController = other.GetComponent<TurretController>();
+            if(turretController.GetTurretType() == TurretController.TurretType.Slow)
+            {
+                speed /= 2;
+            }
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Turret"))
+        {
+            TurretController turretController = other.GetComponent<TurretController>();
+            if (turretController.GetTurretType() == TurretController.TurretType.Slow)
+            {
+                speed *= 2;
+            }
         }
     }
 

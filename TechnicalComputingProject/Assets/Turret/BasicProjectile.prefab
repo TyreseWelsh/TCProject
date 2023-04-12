@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 7875356361174775596}
   - component: {fileID: 3980390492342307623}
   - component: {fileID: 7566168713271878208}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: BasicProjectile
   m_TagString: TurretAttack
   m_Icon: {fileID: 0}
