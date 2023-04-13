@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 //public interface IDamageable
 //{
@@ -13,19 +14,24 @@ public class UnitScript : MonoBehaviour, IDamageable
     int id;
     [SerializeField]
     int unitHealth = 0;
-    bool alive = false;
-    bool slowed = false;
 
     // Start is called before the first frame update
     void Start()
     {
-        alive = true;
+
     }
 
     // Update is called once per frame
     void Update()
     {
         
+    }
+
+    public void Init(int _health, float _speed)
+    {
+        unitHealth = _health;
+        UnitMovement movementScript = this.GetComponent<UnitMovement>();
+        movementScript.SetMoveSpeed(_speed);
     }
 
     public void TakeDamage(int damage)

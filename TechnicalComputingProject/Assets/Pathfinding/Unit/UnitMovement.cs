@@ -7,17 +7,18 @@ using System;
 
 public class UnitMovement : MonoBehaviour
 {
-    public Transform target;
+    Transform target;
     [SerializeField] float speed;
     Vector3[] path;
     int targetIndex;
 
-    public GameObject nodeGridObj;
+    GameObject nodeGridObj;
     NodeGrid nodeGridScript;
 
 
     private void Awake()
     {
+        nodeGridObj = GameObject.Find("PathfindingGrid");
         nodeGridScript = nodeGridObj.GetComponent<NodeGrid>();
     }
 
@@ -27,11 +28,7 @@ public class UnitMovement : MonoBehaviour
     }
     private void Update()
     {
-        //if((nodeGridScript.gridLSize.x > 0 && nodeGridScript.gridLSize.y > 0) & on == true)
-        //{
-        //    on = false;
-        //    PathRequestManager.RequestPath(transform.position, target.position, OnPathFound);
-        //}
+
     }
 
     public void GetPath()
@@ -85,7 +82,7 @@ public class UnitMovement : MonoBehaviour
             //Debug.Log("Next node pos: " + nextNode.nodeWPosition);
             //Debug.Log("Current node pos: " + currentNode.nodeWPosition);
 
-            transform.position = Vector3.MoveTowards(transform.position, nextNode.nodeWPosition, speed * Time.deltaTime);
+            transform.position = Vector3.MoveTowards(transform.position, new Vector3(nextNode.nodeWPosition.x, 1, nextNode.nodeWPosition.z), speed * Time.deltaTime);
 
             yield return null;
         }
@@ -114,10 +111,20 @@ public class UnitMovement : MonoBehaviour
                 //print(currentWaypoint.x + " " + currentWaypoint.y + " " + currentWaypoint.z);
             }
 
-            transform.position = Vector3.MoveTowards(transform.position, currentWaypoint, speed * Time.deltaTime);
+            transform.position = Vector3.MoveTowards(transform.position, new Vector3(currentWaypoint.x, 1, currentWaypoint.z), speed * Time.deltaTime);
 
             yield return null;
         }
+    }
+
+    public void SetTarget(Transform _target)
+    {
+        target = _target;
+    }
+
+    public void SetMoveSpeed(float _speed)
+    {
+        speed = _speed;
     }
 
     private void OnTriggerEnter(Collider other)
