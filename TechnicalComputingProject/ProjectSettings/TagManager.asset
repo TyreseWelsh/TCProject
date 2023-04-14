@@ -7,6 +7,7 @@ TagManager:
   - PickUp
   - TurretAttack
   - Turret
+  - Unit
   layers:
   - Default
   - TransparentFX

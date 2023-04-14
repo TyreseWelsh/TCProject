@@ -10,6 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 6831287117312805751}
   - component: {fileID: 1043027823926339209}
+  - component: {fileID: 1268827523}
+  - component: {fileID: 1268827524}
   m_Layer: 0
   m_Name: PlayerManager
   m_TagString: Untagged
@@ -47,3 +49,31 @@ MonoBehaviour:
   placementZone: {fileID: 9200010459509264046, guid: 844e48a7f4cb8a645857f0fd4360ed47, type: 3}
   objectToPlace: {fileID: 2903747040396281152, guid: d9594e9402eb4134c9948a2d45a2672c, type: 3}
   c: {fileID: 0}
+  nodeGrid: {fileID: 0}
+  uiManager: {fileID: 0}
+--- !u!114 &1268827523
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6038170341935000040}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3c869bea1ad64514faeb1ebbfb421493, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  unitList: []
+--- !u!114 &1268827524
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6038170341935000040}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 88629cbd44b1e0d4f82657f1506bd39f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  healthText: {fileID: 0}

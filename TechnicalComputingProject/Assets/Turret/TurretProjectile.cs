@@ -50,8 +50,9 @@ public class TurretProjectile : MonoBehaviour
             UnitScript unitScript = collision.gameObject.GetComponent<UnitScript>();
             if (unitScript is IDamageable)
             {
-                unitScript.TakeDamage(5);
+                unitScript.TakeDamage(4);
             }
+            Destroy(gameObject);
         }
     }
 }

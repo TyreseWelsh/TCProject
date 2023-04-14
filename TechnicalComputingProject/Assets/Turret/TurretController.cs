@@ -4,15 +4,10 @@ using UnityEngine;
 
 public class TurretController : MonoBehaviour
 {
-    public enum TurretType
-    {
-        Basic,
-        Instant,
-        Slow
-    }
 
-    [SerializeField]
-    TurretType turretType = TurretType.Basic;
+
+    PlayerManager playerManagerScript;
+
 
     Transform targetTransform;
 
@@ -30,13 +25,16 @@ public class TurretController : MonoBehaviour
     [SerializeField]
     float projectileSpeed;
     bool fired;
-    
+    int turretCost = 0;
+
     SphereCollider objCollider;
     List<GameObject> targetsInRange;
 
     // Start is called before the first frame update
     void Start()
     {
+        GameObject playerManager = GameObject.Find("PlayerManager");
+        playerManagerScript = playerManager.GetComponent<PlayerManager>();
         objCollider = this.GetComponent<SphereCollider>();
         range = objCollider.radius;
         targetsInRange = new List<GameObject>();
@@ -63,9 +61,9 @@ public class TurretController : MonoBehaviour
                         case (0):
                             if (!fired)                                                                         // No projectile
                             {
-                                switch(turretType)
+                                switch(playerManagerScript.currentTurretType)
                                 {
-                                    case (TurretType.Instant):
+                                    case (PlayerManager.TurretTypes.Instant):
                                         if (targetsInRange.Count > 0)
                                         {
                                             StartCoroutine(InstantAttack());
@@ -98,11 +96,6 @@ public class TurretController : MonoBehaviour
             }
         }
         
-    }
-
-    public TurretType GetTurretType()
-    {
-        return turretType;
     }
 
     private void OnTriggerEnter(Collider other)

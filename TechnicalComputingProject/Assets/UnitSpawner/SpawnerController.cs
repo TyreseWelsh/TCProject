@@ -18,12 +18,15 @@ public class SpawnerController : MonoBehaviour
 
     [SerializeField]
     float spawnRate;
+
+    UnitManager unitManager;
     bool spawned;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        GameObject playerManager = GameObject.Find("PlayerManager");
+        unitManager = playerManager.GetComponent<UnitManager>();
     }
 
     // Update is called once per frame
@@ -44,8 +47,12 @@ public class SpawnerController : MonoBehaviour
         UnitScript unitScript = newUnit.GetComponent<UnitScript>();
         UnitMovement unitMovementScript = newUnit.GetComponent<UnitMovement>();
 
+
         unitScript.Init(unitHealth, unitMoveSpeed);
         unitMovementScript.SetTarget(unitTarget);
+
+        unitManager.unitList.Add(newUnit);
+
         spawned = false;
     }
 }

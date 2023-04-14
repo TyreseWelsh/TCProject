@@ -15,11 +15,17 @@ public class UnitMovement : MonoBehaviour
     GameObject nodeGridObj;
     NodeGrid nodeGridScript;
 
+    [SerializeField]
+    UnitManager unitManager;
+    PlayerManager playerManagerScript;
 
     private void Awake()
     {
         nodeGridObj = GameObject.Find("PathfindingGrid");
         nodeGridScript = nodeGridObj.GetComponent<NodeGrid>();
+
+        GameObject playerManager = GameObject.Find("PlayerManager");
+        playerManagerScript = playerManager.GetComponent<PlayerManager>();
     }
 
     private void Start()
@@ -28,7 +34,11 @@ public class UnitMovement : MonoBehaviour
     }
     private void Update()
     {
-
+        if (transform.position.x == nodeGridScript.flowTargetTransform.position.x && transform.position.z == nodeGridScript.flowTargetTransform.position.z)
+        {
+            print("Reached goal");
+            Destroy(gameObject);
+        }
     }
 
     public void GetPath()
@@ -69,25 +79,21 @@ public class UnitMovement : MonoBehaviour
             Node nextNode = nodeGridScript.GetNeighbours(currentNode)[0];
             foreach(Node neighbourNode in nodeGridScript.GetNeighbours(currentNode))
             {
-                    if (neighbourNode.gCost < nextNode.gCost)
+                if (neighbourNode.gCost < nextNode.gCost)                                                           // Going through all neighbours g costs to determine lowest one to move to
                     {
                         nextNode = neighbourNode;
                     }
             }
 
-            if (transform.position == nextNode.nodeWPosition)
+            if (transform.position.x == nextNode.nodeWPosition.x && transform.position.z == nextNode.nodeWPosition.z)
             {
                 currentNode = nextNode;
             }
-            //Debug.Log("Next node pos: " + nextNode.nodeWPosition);
-            //Debug.Log("Current node pos: " + currentNode.nodeWPosition);
 
-            transform.position = Vector3.MoveTowards(transform.position, new Vector3(nextNode.nodeWPosition.x, 1, nextNode.nodeWPosition.z), speed * Time.deltaTime);
+            transform.position = Vector3.MoveTowards(new Vector3(transform.position.x, 1, transform.position.z), new Vector3(nextNode.nodeWPosition.x, 1, nextNode.nodeWPosition.z), speed * Time.deltaTime);
 
             yield return null;
         }
-
-
     }
 
     IEnumerator FollowDirectPath()
@@ -97,7 +103,7 @@ public class UnitMovement : MonoBehaviour
         {
             //print("unit: " + transform.position + " w: " + currentWaypoint);
             
-            if (transform.position == currentWaypoint)
+            if (transform.position.x == currentWaypoint.x && transform.position.z == currentWaypoint.z)
             {
                 targetIndex++;
                 if(targetIndex >= path.Length)
@@ -131,8 +137,7 @@ public class UnitMovement : MonoBehaviour
     {
         if(other.CompareTag("Turret"))
         {
-            TurretController turretController = other.GetComponent<TurretController>();
-            if(turretController.GetTurretType() == TurretController.TurretType.Slow)
+            if(playerManagerScript.GetTurretType() == PlayerManager.TurretTypes.Slow)
             {
                 speed /= 2;
             }
@@ -144,7 +149,7 @@ public class UnitMovement : MonoBehaviour
         if (other.CompareTag("Turret"))
         {
             TurretController turretController = other.GetComponent<TurretController>();
-            if (turretController.GetTurretType() == TurretController.TurretType.Slow)
+            if (playerManagerScript.GetTurretType() == PlayerManager.TurretTypes.Slow)
             {
                 speed *= 2;
             }

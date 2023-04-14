@@ -6,17 +6,17 @@ using TMPro;
 
 public class UIManager : MonoBehaviour
 {
-    [SerializeField] TMP_Text scoreText;
-    int playerScore = 0;
+    [SerializeField] TMP_Text soulsText;
+    int playerSouls = 0;
 
-    public void SetScore(int newScore)
+    public void SetSouls(int newSouls)
     {
-        playerScore += newScore;
-        scoreText.text = "Score: " + playerScore;
+        playerSouls += newSouls;
+        soulsText.text = "Souls: " + playerSouls;
     }
 
     public int GetScore()
     {
-        return playerScore;
+        return playerSouls;
     }
 }

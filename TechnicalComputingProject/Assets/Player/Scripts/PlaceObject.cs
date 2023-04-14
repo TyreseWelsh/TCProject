@@ -8,31 +8,33 @@ using UnityEngine.UIElements;
 public class PlaceObject : MonoBehaviour
 {
     [SerializeField]
-    private GameObject placementZone;
-    [SerializeField] 
-    private GameObject objectToPlace;
+    GameObject placementZone;
     [SerializeField]
     private Camera c;
     int rayDistance = 300;
 
     private GameObject placementZoneObj;
     public GameObject nodeGrid;
-    NodeGrid nodeGridScript;
-    public GameObject unit;
-    UnitMovement unitMovementScript;
+    //NodeGrid nodeGridScript;
+    //public GameObject unit;
+    //UnitMovement unitMovementScript;
+    PlayerManager playerManagerScript;
+    
+    public List<GameObject> turretMeshes;
+
     public UIManager uiManager;
 
 
     private void Awake()
     {
-        nodeGridScript = nodeGrid.GetComponent<NodeGrid>();
-        unitMovementScript = unit.GetComponent<UnitMovement>();
+        GameObject playerManager = GameObject.Find("PlayerManager");
+        playerManagerScript = playerManager.GetComponent<PlayerManager>();
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        placementZoneObj = Instantiate(placementZone, new Vector3(100, 100, 100), Quaternion.identity);                    // Create object at ray hit x/z position with y=1 to be above ground
+        placementZoneObj = Instantiate(placementZone, new Vector3(0, 0, 0), Quaternion.identity);                    // Create object at ray hit x/z position with y=1 to be above ground
     }
 
     // Update is called once per frame
@@ -49,7 +51,7 @@ public class PlaceObject : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0))                                                                                    // If left mouse button is clicked
         {
-            SpawnObject(objectToPlace, ray, hit, g0LayerMask, g1LayerMask, placedLayerMask);                                // Spawn Object to block path
+            SpawnObject(turretMeshes[(int)playerManagerScript.GetTurretType()], ray, hit, g0LayerMask, g1LayerMask, placedLayerMask);                                // Spawn Object to block path
         }
         else if(Input.GetMouseButtonDown(1))
         {
@@ -58,12 +60,12 @@ public class PlaceObject : MonoBehaviour
     }
 
     // Function to display location where player will place object
-    void DisplayPlacementZone(Ray ray, RaycastHit hit, LayerMask g0LayerMask, LayerMask g1LayerMask, LayerMask placedLayerMask)
+    void DisplayPlacementZone(Ray ray, RaycastHit hit, LayerMask _g0LayerMask, LayerMask _g1LayerMask, LayerMask _placedLayerMask)
     {
-        if (Physics.Raycast(ray, out hit, rayDistance, g0LayerMask))
+        if (Physics.Raycast(ray, out hit, rayDistance, _g1LayerMask))
         {
-            if (Physics.CheckSphere(CalculatePosition(hit), 0.1f, placedLayerMask)                           // Returns true if another collision box overlaps with
-                || Physics.CheckSphere(CalculatePosition(hit), 0.1f, g1LayerMask))                           // checking sphere on PlacedObject or ground1 layer
+            if (Physics.CheckSphere(CalculatePosition(hit), 0.1f, _placedLayerMask)                           // Returns true if another collision box overlaps with
+                || Physics.CheckSphere(CalculatePosition(hit), 0.1f, _g0LayerMask))                           // checking sphere on PlacedObject or ground1 layer
             {
                 placementZoneObj.SetActive(false);
             }
@@ -83,19 +85,30 @@ public class PlaceObject : MonoBehaviour
     // Function to get point in world space to place object using mouse position
     void SpawnObject(GameObject objectToSpawn, Ray ray, RaycastHit hit, LayerMask g0LayerMask, LayerMask g1LayerMask, LayerMask placedLayerMask)
     {
-        if (Physics.Raycast(ray, out hit, rayDistance, g0LayerMask))
+        if (Physics.Raycast(ray, out hit, rayDistance, g1LayerMask))
         {
             if(Physics.CheckSphere(CalculatePosition(hit), 0.1f, placedLayerMask)                           // Returns true if another collision box overlaps with
-                || Physics.CheckSphere(CalculatePosition(hit), 0.1f, g1LayerMask))                          // checking sphere on PlacedObject or ground1 layer
+                || Physics.CheckSphere(CalculatePosition(hit), 0.1f, g0LayerMask))                          // checking sphere on PlacedObject or ground1 layer
             {
                 Debug.Log("Object Detected");
             }
             else 
             {
                 Instantiate(objectToSpawn, CalculatePosition(hit), Quaternion.identity);                    // Create object at ray hit x/z position with y=1 to be above ground
-                nodeGridScript.CreateGrid();
-                unitMovementScript.GetPath();
-                uiManager.SetScore(-10);
+                //nodeGridScript.CreateGrid();
+                //unitMovementScript.GetPath();
+                switch(playerManagerScript.currentTurretType)
+                {
+                    case (PlayerManager.TurretTypes.Basic):
+                        uiManager.SetSouls(-50);
+                        break;
+                    case (PlayerManager.TurretTypes.Instant):
+                        uiManager.SetSouls(-100);
+                        break;
+                    case (PlayerManager.TurretTypes.Slow):
+                        uiManager.SetSouls(-20);
+                        break;
+                }
             }
         }
     }
