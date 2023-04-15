@@ -103,6 +103,7 @@ MonoBehaviour:
   basicProjectile: {fileID: 6106325464978827661, guid: 71131cdabe8ca0d489dd958223752134, type: 3}
   projectileType: 0
   projectileSpeed: 0
+  turretCost: 200
   turretDamage: 3
 --- !u!135 &4736844649117753454
 SphereCollider:

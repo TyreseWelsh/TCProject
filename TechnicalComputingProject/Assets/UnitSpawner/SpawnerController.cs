@@ -20,6 +20,9 @@ public class SpawnerController : MonoBehaviour
     float spawnRate;
 
     UnitManager unitManager;
+    GameManagerScript gameManagerScript;
+    public bool enableSpawning = true;
+    int unitsSpawned;
     bool spawned;
 
     // Start is called before the first frame update
@@ -27,14 +30,20 @@ public class SpawnerController : MonoBehaviour
     {
         GameObject playerManager = GameObject.Find("PlayerManager");
         unitManager = playerManager.GetComponent<UnitManager>();
+
+        GameObject gameManager = GameObject.Find("GameManager");
+        gameManagerScript = gameManager.GetComponent<GameManagerScript>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(!spawned)
+        if(enableSpawning && !spawned)
         {
-            StartCoroutine(SpawnUnit());
+            if(unitsSpawned < gameManagerScript.maxWaveEnemies)
+            {
+                StartCoroutine(SpawnUnit());
+            }
         }
     }
 
@@ -52,6 +61,7 @@ public class SpawnerController : MonoBehaviour
         unitMovementScript.SetTarget(unitTarget);
 
         unitManager.unitList.Add(newUnit);
+        unitsSpawned++;
 
         spawned = false;
     }

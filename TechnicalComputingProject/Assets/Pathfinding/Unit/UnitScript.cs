@@ -16,11 +16,14 @@ public class UnitScript : MonoBehaviour, IDamageable
     int unitHealth = 0;
 
     UnitManager unitManager;
+    GameManagerScript gameManagerScript;
 
     private void Awake()
     {
         GameObject playerManager = GameObject.Find("PlayerManager");
         unitManager = playerManager.GetComponent<UnitManager>();
+        GameObject gameManager = GameObject.Find("GameManager");
+        gameManagerScript = gameManager.GetComponent<GameManagerScript>();
     }
 
     // Start is called before the first frame update
@@ -49,6 +52,7 @@ public class UnitScript : MonoBehaviour, IDamageable
         unitHealth--;
         if (unitHealth <= 0)
         {
+            gameManagerScript.ReduceNumEnemies();
             Destroy(gameObject);
         }
     }

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerManager : MonoBehaviour, IDamageable
@@ -8,8 +9,10 @@ public class PlayerManager : MonoBehaviour, IDamageable
     int playerHealth;
     [SerializeField] TMP_Text healthText;
     [SerializeField] TMP_Text soulsText;
-    int playerSouls = 1000;
+    int playerSouls = 0;
     int turretCost = 100;
+
+    bool soulsIncreased = false;
 
     public enum TurretTypes
     {
@@ -25,6 +28,24 @@ public class PlayerManager : MonoBehaviour, IDamageable
         healthText.text = "Health: " + playerHealth;
 
         soulsText.text = "Souls: " + playerSouls;
+    }
+
+    private void Update()
+    {
+        if(!soulsIncreased)
+        {
+            StartCoroutine(IncreaseSouls());
+        }
+    }
+
+    IEnumerator IncreaseSouls()
+    {
+        soulsIncreased = true;
+        int soulIncreaseDelay = 1;
+        yield return new WaitForSeconds(soulIncreaseDelay);
+
+        SetSouls(10);
+        soulsIncreased = false;
     }
 
     public void SetTurretType(int _turretType)

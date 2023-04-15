@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2965621143671746016}
   - component: {fileID: 750377834393495002}
   - component: {fileID: 4836150898423811632}
-  m_Layer: 7
+  m_Layer: 6
   m_Name: TestTile_03
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -62,7 +62,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 294b00804ed584d4ab6b6ea04153afdb, type: 2}
+  - {fileID: 2100000, guid: 81c6f188905d3ca4c9557201c0a0e156, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

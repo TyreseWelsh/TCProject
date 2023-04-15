@@ -28,8 +28,8 @@ public class PlaceObject : MonoBehaviour
         GameObject nodeGrid = GameObject.Find("PathfindingGrid");
         nodeGridScript = nodeGrid.GetComponent<NodeGrid>();
 
-        GameObject UIManager = GameObject.Find("UIManager");
-        UIManagerScript = UIManager.GetComponent<UIManager>();
+        GameObject gameManager = GameObject.Find("GameManager");
+        UIManagerScript = gameManager.GetComponent<UIManager>();
     }
 
     // Start is called before the first frame update
