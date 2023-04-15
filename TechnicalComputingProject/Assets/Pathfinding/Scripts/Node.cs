@@ -21,6 +21,7 @@ public class Node : IHeapItem<Node>
             return gCost + hCost;
         }
     }
+    public bool aboveOccupied = false;
 
     public Node(int newId, bool newWalkable, Vector3 newNodeWPosition, int newGridXPos, int newGridYPos)
     {

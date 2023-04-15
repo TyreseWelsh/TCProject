@@ -11,8 +11,7 @@ public class TurretController : MonoBehaviour
 
     Transform targetTransform;
 
-    [SerializeField]
-    float fireRate = 1;
+    public float fireRate = 1;
     float range;
 
     [SerializeField]
@@ -25,7 +24,8 @@ public class TurretController : MonoBehaviour
     [SerializeField]
     float projectileSpeed;
     bool fired;
-    int turretCost = 0;
+    public int turretCost = 0;
+    public int turretDamage = 0;
 
     SphereCollider objCollider;
     List<GameObject> targetsInRange;
@@ -120,7 +120,7 @@ public class TurretController : MonoBehaviour
         {
             GameObject newProjectile = Instantiate(basicProjectile, projectileSpawn.transform.position, Quaternion.identity);
             TurretProjectile projectileScript = newProjectile.GetComponent<TurretProjectile>();
-            projectileScript.Init(projectileType, projectileSpeed, projectileSpawn.transform.position, targetTransform.position);
+            projectileScript.Init(projectileType, projectileSpeed, projectileSpawn.transform.position, targetTransform.position, turretDamage);
             fired = false;
         }
     }
@@ -137,7 +137,7 @@ public class TurretController : MonoBehaviour
                 UnitScript unitScript = target.GetComponent<UnitScript>();
                 if(unitScript is IDamageable)
                 {
-                    unitScript.TakeDamage(2);
+                    unitScript.TakeDamage(turretDamage);
                 }
             }
             print("Instant Damage!");

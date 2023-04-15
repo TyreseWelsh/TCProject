@@ -10,7 +10,7 @@ public class PickUpScript : MonoBehaviour
     {
         if (other.gameObject.CompareTag("PickUp"))
         {
-            uiManager.SetSouls(50);
+            //uiManager.SetSouls(50);
             other.gameObject.SetActive(false);
         }
     }

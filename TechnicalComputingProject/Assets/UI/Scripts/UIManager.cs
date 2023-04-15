@@ -2,21 +2,69 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
-
+using UnityEngine.SceneManagement;
 
 public class UIManager : MonoBehaviour
 {
-    [SerializeField] TMP_Text soulsText;
-    int playerSouls = 0;
+    [SerializeField]
+    GameObject pauseMenu;
+    [SerializeField]
+    PlaceObject placeObjectScripts;
+    [SerializeField]
+    List<TMP_Text> turretUIStats;
 
-    public void SetSouls(int newSouls)
+    bool paused = false;
+
+    private void Start()
     {
-        playerSouls += newSouls;
-        soulsText.text = "Souls: " + playerSouls;
+        for (int i = 0; i < turretUIStats.Count; i++)
+        {
+            TurretController currentTurretController = placeObjectScripts.turretMeshes[i].GetComponent<TurretController>();
+            turretUIStats[i].text = "Cost: " + currentTurretController.turretCost  + "\n" + "Damage: " + currentTurretController.turretDamage + "\n" + "Fire Rate: " + currentTurretController.fireRate;
+        }
     }
 
-    public int GetScore()
+    private void Update()
     {
-        return playerSouls;
+        if(Input.GetKeyDown(KeyCode.P))
+        {
+            if (paused)
+            {
+                SetPaused(false);
+            }
+            else
+            {
+                SetPaused(true);
+            }
+        }
+    }
+
+    public bool GetPaused()
+    {
+        return paused;
+    }
+
+    public void SetPaused(bool _paused)
+    {
+        paused = _paused;
+        pauseMenu.SetActive(paused);
+        if (paused)
+        {
+            Time.timeScale = 0.0f;
+        }
+        else
+        {
+            Time.timeScale = 1.0f;
+        }
+    }
+
+    public void GoToMainMenu()
+    {
+        SceneManager.LoadScene("MainMenu");
+    }
+
+    public void ExitGame()
+    {
+        Application.Quit();
     }
 }

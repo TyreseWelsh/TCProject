@@ -13,6 +13,7 @@ public class TurretProjectile : MonoBehaviour
     float speed;
     Vector3 spawnPos;
     Vector3 targetPos;
+    int damage = 0;
 
     // Start is called before the first frame update
     void Start()
@@ -26,7 +27,7 @@ public class TurretProjectile : MonoBehaviour
         transform.position = Vector3.MoveTowards(transform.position, targetPos, speed * Time.deltaTime);
     }
 
-    public void Init(int _projectileType, float _speed, Vector3 _spawnPos, Vector3 _targetPos)
+    public void Init(int _projectileType, float _speed, Vector3 _spawnPos, Vector3 _targetPos, int _damage)
     {
         switch(projectileType) 
         {
@@ -41,6 +42,7 @@ public class TurretProjectile : MonoBehaviour
         speed = _speed;
         spawnPos = _spawnPos;
         targetPos = _targetPos;
+        damage = _damage;
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -50,7 +52,7 @@ public class TurretProjectile : MonoBehaviour
             UnitScript unitScript = collision.gameObject.GetComponent<UnitScript>();
             if (unitScript is IDamageable)
             {
-                unitScript.TakeDamage(4);
+                unitScript.TakeDamage(damage);
             }
             Destroy(gameObject);
         }

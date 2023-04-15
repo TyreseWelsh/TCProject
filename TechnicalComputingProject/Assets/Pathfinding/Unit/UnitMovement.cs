@@ -37,6 +37,7 @@ public class UnitMovement : MonoBehaviour
         if (transform.position.x == nodeGridScript.flowTargetTransform.position.x && transform.position.z == nodeGridScript.flowTargetTransform.position.z)
         {
             print("Reached goal");
+            playerManagerScript.TakeDamage(2);
             Destroy(gameObject);
         }
     }
