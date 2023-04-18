@@ -39,6 +39,16 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    public void StartGame()
+    {
+        SceneManager.LoadScene("Level1");
+    }
+
+    public void ExitGame()
+    {
+        Application.Quit();
+    }
+
     public bool GetPaused()
     {
         return paused;
@@ -61,10 +71,5 @@ public class UIManager : MonoBehaviour
     public void GoToMainMenu()
     {
         SceneManager.LoadScene("MainMenu");
-    }
-
-    public void ExitGame()
-    {
-        Application.Quit();
     }
 }

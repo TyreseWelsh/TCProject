@@ -100,7 +100,10 @@ public class TurretController : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        targetsInRange.Add(other.gameObject);
+        if(other.gameObject.CompareTag("Unit"))
+        {
+            targetsInRange.Add(other.gameObject);
+        }
         //while(InRange(other.gameObject))
         //{
         //    target = other.gameObject;

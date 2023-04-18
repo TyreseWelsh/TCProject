@@ -56,5 +56,9 @@ public class TurretProjectile : MonoBehaviour
             }
             Destroy(gameObject);
         }
+        else if(collision.gameObject.CompareTag("Environment"))
+        {
+            Destroy(gameObject);
+        }
     }
 }

@@ -8,6 +8,7 @@ TagManager:
   - TurretAttack
   - Turret
   - Unit
+  - Environment
   layers:
   - Default
   - TransparentFX

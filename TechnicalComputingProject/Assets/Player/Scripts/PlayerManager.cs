@@ -9,7 +9,7 @@ public class PlayerManager : MonoBehaviour, IDamageable
     int playerHealth;
     [SerializeField] TMP_Text healthText;
     [SerializeField] TMP_Text soulsText;
-    int playerSouls = 0;
+    int playerSouls = 100;
     int turretCost = 100;
 
     bool soulsIncreased = false;
