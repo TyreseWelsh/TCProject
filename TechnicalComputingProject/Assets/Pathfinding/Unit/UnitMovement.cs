@@ -15,8 +15,6 @@ public class UnitMovement : MonoBehaviour
     GameObject nodeGridObj;
     NodeGrid nodeGridScript;
 
-    [SerializeField]
-    UnitManager unitManager;
     PlayerManager playerManagerScript;
 
     private void Awake()
