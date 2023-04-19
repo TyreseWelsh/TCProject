@@ -46,11 +46,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a6af8a445dbb8443bf516cd41e3b044, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  placementZone: {fileID: 9200010459509264046, guid: 844e48a7f4cb8a645857f0fd4360ed47, type: 3}
-  objectToPlace: {fileID: 2903747040396281152, guid: d9594e9402eb4134c9948a2d45a2672c, type: 3}
+  placementZone: {fileID: 4736844649117753441, guid: d96f742ca03aba64aaf640777d977368, type: 3}
   c: {fileID: 0}
-  nodeGrid: {fileID: 0}
-  uiManager: {fileID: 0}
+  turretMeshes:
+  - {fileID: 6309167145472310403, guid: c613dc19bdbcff541896d8f7a1db3bfc, type: 3}
+  - {fileID: 4736844649117753441, guid: 4224141618007a442a0990abd3701610, type: 3}
+  - {fileID: 4736844649117753441, guid: 7998130b4d598864ba9b5e5cd81ba426, type: 3}
 --- !u!114 &1268827523
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -77,3 +78,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   healthText: {fileID: 0}
+  soulsText: {fileID: 0}
+  currentTurretType: 0

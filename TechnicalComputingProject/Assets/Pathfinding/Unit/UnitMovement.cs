@@ -17,6 +17,9 @@ public class UnitMovement : MonoBehaviour
 
     PlayerManager playerManagerScript;
 
+    [SerializeField]
+    GameObject slowingEffect;
+
     private void Awake()
     {
         nodeGridObj = GameObject.Find("PathfindingGrid");
@@ -34,7 +37,6 @@ public class UnitMovement : MonoBehaviour
     {
         if (transform.position.x == nodeGridScript.flowTargetTransform.position.x && transform.position.z == nodeGridScript.flowTargetTransform.position.z)
         {
-            print("Reached goal");
             playerManagerScript.TakeDamage(2);
             Destroy(gameObject);
         }
@@ -134,24 +136,26 @@ public class UnitMovement : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.CompareTag("Turret"))
+        if(other.GetComponent<SlowingTurret>() != null)
         {
-            if(playerManagerScript.GetTurretType() == PlayerManager.TurretTypes.Slow)
+            if(gameObject.transform.Find("SlowingEffect(Clone)") == null)
             {
-                speed /= 2;
+                GameObject slowObject = Instantiate(slowingEffect, gameObject.transform.position, Quaternion.identity);
+                slowObject.transform.parent = gameObject.transform;
             }
+            speed /= 1.2f;
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("Turret"))
+        if (other.GetComponent<SlowingTurret>() != null)
         {
-            TurretController turretController = other.GetComponent<TurretController>();
-            if (playerManagerScript.GetTurretType() == PlayerManager.TurretTypes.Slow)
+            if(gameObject.transform.Find("SlowingEffect(Clone)") != null)
             {
-                speed *= 2;
+                Destroy(gameObject.transform.Find("SlowingEffect(Clone)").gameObject);
             }
+            speed *= 1.2f;
         }
     }
 
