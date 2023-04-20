@@ -87,8 +87,8 @@ public class PlaceObject : MonoBehaviour
     {
         if (Physics.Raycast(ray, out hit, rayDistance, g1LayerMask))
         {
-            if(playerManagerScript.GetTurretCost() <= playerManagerScript.GetSouls())
-            {
+            //if(playerManagerScript.GetTurretCost() <= playerManagerScript.GetSouls())
+            //{
                 Node nodeHit = nodeGridScript.NodeFromWorldPoint(hit.point);
                 if (nodeHit.aboveOccupied                                                                       // Returns true if another collision box overlaps with
                     || Physics.CheckSphere(CalculatePosition(hit), 0.1f, g0LayerMask))                          // occupied tile or checking sphere on ground1 layer
@@ -123,7 +123,7 @@ public class PlaceObject : MonoBehaviour
                     }
                     nodeHit.aboveOccupied = true;
                 }
-            }
+            //}
         }
     }
 

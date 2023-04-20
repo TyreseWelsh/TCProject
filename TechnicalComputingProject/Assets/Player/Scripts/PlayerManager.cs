@@ -33,7 +33,7 @@ public class PlayerManager : MonoBehaviour, IDamageable
 
     private void Start()
     {
-        playerHealth = 6;
+        playerHealth = 20;
         healthText.text = "Health: " + playerHealth;
 
         soulsText.text = "Souls: " + playerSouls;

@@ -33,7 +33,7 @@ public class Pathfinding : MonoBehaviour
 
         Node endNode = nodeGrid.NodeFromWorldPoint(endPos);
 
-        if (endNode.walkable)
+        if (endNode.walkable && !endNode.aboveOccupied)
         {
             Heap<Node> openSet = new Heap<Node>(nodeGrid.MaxSize);                                                                              // Creating list to store open nodes
             List<Node> closedSet = new List<Node>();
@@ -56,7 +56,7 @@ public class Pathfinding : MonoBehaviour
                 {
                     neighbourNode.gCost = 0;
                     neighbourNode.hCost = 0;
-                    if (!neighbourNode.walkable || closedSet.Exists(x => x.id == neighbourNode.id))                             // Checking if neighbour node is not walkable or is in the closed set
+                    if (!neighbourNode.walkable || neighbourNode.aboveOccupied ||  closedSet.Exists(x => x.id == neighbourNode.id))                             // Checking if neighbour node is not walkable or is in the closed set
                     {                                                                                                           // so we can just skip to the next neighbor in list
                         continue;
                     }

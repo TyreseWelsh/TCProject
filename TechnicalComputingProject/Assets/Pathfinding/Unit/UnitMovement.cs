@@ -19,6 +19,8 @@ public class UnitMovement : MonoBehaviour
     {
         nodeGridObj = GameObject.Find("PathfindingGrid");
         nodeGridScript = nodeGridObj.GetComponent<NodeGrid>();
+
+        target = nodeGridScript.targetTransform;
     }
 
     private void Start()
@@ -54,7 +56,7 @@ public class UnitMovement : MonoBehaviour
     IEnumerator FollowFlowField()
     {
         Node currentNode = nodeGridScript.NodeFromWorldPoint(transform.position);
-        Node endNode = nodeGridScript.NodeFromWorldPoint(nodeGridScript.flowTargetTransform.position);
+        Node endNode = nodeGridScript.NodeFromWorldPoint(nodeGridScript.targetTransform.position);
 
         while (currentNode.id != endNode.id)
         {

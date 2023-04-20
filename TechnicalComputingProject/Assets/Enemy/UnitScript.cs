@@ -44,7 +44,7 @@ public class UnitScript : MonoBehaviour, IDamageable
     // Update is called once per frame
     void Update()
     {
-        if (transform.position.x == nodeGridScript.flowTargetTransform.position.x && transform.position.z == nodeGridScript.flowTargetTransform.position.z)
+        if (transform.position.x == nodeGridScript.targetTransform.position.x && transform.position.z == nodeGridScript.targetTransform.position.z)
         {
             playerManagerScript.TakeDamage(2);
             Destroy(gameObject);

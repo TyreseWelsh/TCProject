@@ -12,8 +12,11 @@ public class NodeGrid : MonoBehaviour
 {
     public bool drawAllGizmos = true;
     [SerializeField]
-    LayerMask obstacleLayer;
-    LayerMask placedObjMask;
+    LayerMask obstacleLayers;
+    [SerializeField]
+    bool obstaclesAboveGrid;
+    [SerializeField]
+    float distanceAboveGrid;
     public Vector2 gridWSize;                                                                                                       // Grid size in world
     public Node [,] grid;
     public float nodeSize;
@@ -21,7 +24,7 @@ public class NodeGrid : MonoBehaviour
 
     public List<Node> path;
 
-    public Transform flowTargetTransform;
+    public Transform targetTransform;
     bool flowFieldCreated;
 
     [SerializeField]
@@ -36,8 +39,7 @@ public class NodeGrid : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
-        //obstacleLayer = LayerMask.GetMask("Environment");
-        placedObjMask = LayerMask.GetMask("PlacedObject");
+        //placedObjMask = LayerMask.GetMask("PlacedObject");
 
         CreateGrid();
     }
@@ -74,9 +76,13 @@ public class NodeGrid : MonoBehaviour
                 worldPoint = wBottomLeft + Vector3.right * (x * nodeSize + (nodeSize / 2))                                            // World position of node in grid
                     + Vector3.forward * (y * nodeSize + (nodeSize / 2));
 
-                bool walkable = !(Physics.CheckSphere(worldPoint, nodeSize / 2 - nodeSize / 3, obstacleLayer | placedObjMask));          // Setting if the current node is walkable or not using collisions      
-
-                bool occupied = Physics.CheckSphere(new Vector3(worldPoint.x, 1, worldPoint.z), nodeSize / 2 - nodeSize / 3);
+                bool walkable = !Physics.CheckSphere(worldPoint, nodeSize / 2 - nodeSize / 3, obstacleLayers);          // Setting if the current node is walkable or not using collisions      
+                bool occupied = false;
+                print(occupied);
+                if (obstaclesAboveGrid)
+                {
+                    occupied = Physics.CheckSphere(new Vector3(worldPoint.x, distanceAboveGrid, worldPoint.z), nodeSize / 2 - nodeSize / 3, obstacleLayers);
+                }
 
                 grid[x, y] = new Node(nodeID, walkable, worldPoint, x, y, occupied);                                                                            // Create a new node at this index with the right variables
                 nodeID++;
@@ -86,7 +92,7 @@ public class NodeGrid : MonoBehaviour
         if(currentPathFindingType == PathfindingType.FlowField)
         {
             UnityEngine.Debug.Log("Flow Field Pathfinding");
-            CreateFlowField(flowTargetTransform.position);
+            CreateFlowField(targetTransform.position);
         }
     }
 
@@ -99,7 +105,7 @@ public class NodeGrid : MonoBehaviour
 
         Node targetNode = NodeFromWorldPoint(endPos);
 
-        if (targetNode.walkable)
+        if (targetNode.walkable && !targetNode.aboveOccupied)
         {
             Heap<Node> openSet = new Heap<Node>(MaxSize);                                                                              // Creating list to store open nodes
             List<Node> closedSet = new List<Node>();
@@ -114,7 +120,7 @@ public class NodeGrid : MonoBehaviour
 
                 foreach (Node neighbourNode in GetNeighbours(currentNode))
                 {
-                    if (!neighbourNode.walkable || closedSet.Exists(x => x.id == neighbourNode.id))                             // Checking if neighbour node is not walkable or is in the closed set
+                    if (!neighbourNode.walkable || neighbourNode.aboveOccupied || closedSet.Exists(x => x.id == neighbourNode.id))                             // Checking if neighbour node is not walkable or is in the closed set
                     {                                                                                                           // so we can just skip to the next neighbor in list
                         continue;
                     }
@@ -170,7 +176,7 @@ public class NodeGrid : MonoBehaviour
 
     public void SetFlowTarget(Transform newTargetTransform)
     {
-        flowTargetTransform = newTargetTransform;
+        targetTransform = newTargetTransform;
     }
 
     public List<Node> GetNeighbours(Node node)
@@ -190,7 +196,8 @@ public class NodeGrid : MonoBehaviour
 
                 if(checkXPos >=0 && checkXPos < gridLSize.x && checkYPos >= 0 && checkYPos < gridLSize.y)                               // Checking if node is actually inside of grid
                 {
-                    if(grid[Mathf.FloorToInt(Mathf.Min(checkXPos)), Mathf.FloorToInt(Mathf.Min(checkYPos))].walkable)                  // Checking if node is valid for pathfinding
+                    if(grid[Mathf.FloorToInt(Mathf.Min(checkXPos)), Mathf.FloorToInt(Mathf.Min(checkYPos))].walkable && 
+                        !grid[Mathf.FloorToInt(Mathf.Min(checkXPos)), Mathf.FloorToInt(Mathf.Min(checkYPos))].aboveOccupied)                  // Checking if node is valid for pathfinding (Walkable and not occupied)
                     {
                         neighbours.Add(grid[Mathf.FloorToInt(Mathf.Min(checkXPos)), Mathf.FloorToInt(Mathf.Min(checkYPos))]);                                      // Add valid node to neighbours list
                     }
@@ -232,7 +239,7 @@ public class NodeGrid : MonoBehaviour
 
                     Gizmos.DrawWireCube(node.nodeWPosition, Vector3.one * (nodeSize - 0.1f));                                               // Drawing the cubes with small gap inbetween
 
-                    if (currentPathFindingType == PathfindingType.FlowField && node.walkable && flowFieldCreated)
+                    if (currentPathFindingType == PathfindingType.FlowField && node.walkable && !node.aboveOccupied && flowFieldCreated)
                     {
                         Handles.Label(new Vector3(node.nodeWPosition.x, 1, node.nodeWPosition.z), node.gCost.ToString());
                     }

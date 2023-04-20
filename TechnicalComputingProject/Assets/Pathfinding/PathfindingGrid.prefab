@@ -47,12 +47,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   drawAllGizmos: 1
+  obstacleLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  obstaclesAboveGrid: 0
+  distanceAboveGrid: 0
   gridWSize: {x: 43, y: 24}
   nodeSize: 1
   gridLSize: {x: 0, y: 0}
-  AIChar: {fileID: 0}
   flowTargetTransform: {fileID: 0}
-  currentPathFindingType: 1
+  currentPathFindingType: 0
 --- !u!114 &3742451054069760328
 MonoBehaviour:
   m_ObjectHideFlags: 0
