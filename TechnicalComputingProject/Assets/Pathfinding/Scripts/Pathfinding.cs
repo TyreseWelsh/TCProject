@@ -25,9 +25,6 @@ public class Pathfinding : MonoBehaviour
 
     IEnumerator FindDirectPath(Vector3 startPos, Vector3 endPos)
     {
-        Stopwatch sw = new Stopwatch();
-        sw.Start();
-
         Vector3[] waypoints = new Vector3[0];                                                                               // Array to store path waypoint positions
         bool pathSuccess = false;
 
@@ -35,7 +32,7 @@ public class Pathfinding : MonoBehaviour
         startNode.gCost = 0;
 
         Node endNode = nodeGrid.NodeFromWorldPoint(endPos);
-        //print("start: " + startNode.nodeWPosition + " end: " + endNode.nodeWPosition);
+
         if (endNode.walkable)
         {
             Heap<Node> openSet = new Heap<Node>(nodeGrid.MaxSize);                                                                              // Creating list to store open nodes
@@ -46,23 +43,11 @@ public class Pathfinding : MonoBehaviour
             {
                 Node currentNode = openSet.RemoveFirst();
 
-                //for (int i = 1; i < openSet.Count; i++)                                                                          // Looping through open set and checking f costs to decide which node to
-                //{
-                //    if (openSet[i].fCost < currentNode.fCost ||                                                                 // (Will be node with lowest F cost in open list)
-                //        (openSet[i].fCost == currentNode.fCost && openSet[i].hCost < currentNode.hCost))                          // If F cost is the same, compare h cost and pick
-                //    {                                                                                                           // one closest (lowest) to end node
-                //        currentNode = openSet[i];
-                //    }
-                //}
-                //
-                //openSet.Remove(currentNode);
 
                 closedSet.Add(currentNode);
 
                 if (currentNode.id == endNode.id)                                                                                     // Have found the target node
                 {
-                    sw.Stop();
-                    //print("Path found in: " + sw.ElapsedMilliseconds + " ms");
                     pathSuccess = true;
                     break;
                 }
@@ -83,8 +68,6 @@ public class Pathfinding : MonoBehaviour
                         neighbourNode.gCost = newMovementCostToNeighbour;                                                       // Set current G cost to new G cost (better path from start node found)
                         neighbourNode.hCost = nodeGrid.GetDistance(neighbourNode, endNode);                                              // Set H cost as distance to end node
                         neighbourNode.parentNode = currentNode;                                                                 // Setting parent node to look back on
-
-                        // FOR FLOW FIELD PROB ADD SOMETHING AROUND HERE STORING NODES + COSTs + PARENT NODE
 
                         if (!openSet.Contains(neighbourNode))
                         {
@@ -137,7 +120,6 @@ public class Pathfinding : MonoBehaviour
         }
 
         List<Vector3> waypointList = new List<Vector3>();                                                                           // New list of waypoints for path
-        //Vector2 directionOld = Vector2.zero;
 
         waypointList.Add(path[0].nodeWPosition);
 
@@ -152,14 +134,6 @@ public class Pathfinding : MonoBehaviour
             {
                 waypointList.Add(path[i-1].nodeWPosition);
             }
-
-
-            //Vector2 directionNew = new Vector2(path[i - 1].gridXPos - path[i].gridXPos, path[i - 1].gridYPos - path[i].gridYPos);   // Gets a vector2 representing the current direction the unit is moving
-            //if (directionNew != directionOld)                                                                                        // If the current direction is different to old direction
-            //{
-            //    waypointList.Add(path[i-1].nodeWPosition);                                                                            // Add a new waypoint to list
-            //}
-            //directionOld = directionNew;                                                                                            // Setting old direction to current direction to compare with future directions
 
             if (i == path.Count - 1 && oldDirection != new Vector2(path[i].gridXPos, path[i].gridYPos) - new Vector2(startNode.gridXPos, startNode.gridYPos))
             {

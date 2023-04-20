@@ -56,10 +56,6 @@ public class PlaceObject : MonoBehaviour
             {
                 SpawnObject(turretMeshes[(int)playerManagerScript.GetTurretType()], ray, hit, g0LayerMask, g1LayerMask, placedLayerMask);                                // Spawn turret of current type
             }
-            //else if (Input.GetMouseButtonDown(1))
-            //{
-            //    DeleteObject(ray, hit, placedLayerMask);
-            //}
         }
     }
 
@@ -101,17 +97,28 @@ public class PlaceObject : MonoBehaviour
                 }
                 else
                 {
-                    Instantiate(objectToSpawn, CalculatePosition(hit), Quaternion.identity);                    // Create object at ray hit x/z position with y=1 to be above ground
                     switch (playerManagerScript.currentTurretType)
                     {
                         case (PlayerManager.TurretTypes.Basic):
-                            playerManagerScript.SetSouls(-100);
+                            if (playerManagerScript.GetSouls() >= 100)
+                            {
+                                Instantiate(objectToSpawn, CalculatePosition(hit), Quaternion.identity);                    // Create object at ray hit x/z position with y=1 to be above ground
+                                playerManagerScript.SetSouls(-100);
+                            }
                             break;
                         case (PlayerManager.TurretTypes.Instant):
-                            playerManagerScript.SetSouls(-300);
+                            if (playerManagerScript.GetSouls() >= 300)
+                            {
+                                Instantiate(objectToSpawn, CalculatePosition(hit), Quaternion.identity);
+                                playerManagerScript.SetSouls(-300);
+                            }
                             break;
                         case (PlayerManager.TurretTypes.Slow):
-                            playerManagerScript.SetSouls(-160);
+                            if(playerManagerScript.GetSouls() >= 160)
+                            {
+                                Instantiate(objectToSpawn, CalculatePosition(hit), Quaternion.identity);
+                                playerManagerScript.SetSouls(-160);
+                            }
                             break;
                     }
                     nodeHit.aboveOccupied = true;

@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 2985460652690261232}
   - component: {fileID: 5274435220017042115}
   - component: {fileID: 1830669771486884840}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Enemy
   m_TagString: Unit
   m_Icon: {fileID: 0}
@@ -115,7 +115,7 @@ SphereCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 1
+  m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &5274435220017042115
 MonoBehaviour:
@@ -155,6 +155,10 @@ PrefabInstance:
     - target: {fileID: 234410176019126353, guid: fa53030c7fbe284438f68df5f930e17b, type: 3}
       propertyPath: m_Name
       value: PS_Enemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 234410176019126353, guid: fa53030c7fbe284438f68df5f930e17b, type: 3}
+      propertyPath: m_Layer
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 234410176019126354, guid: fa53030c7fbe284438f68df5f930e17b, type: 3}
       propertyPath: m_RootOrder

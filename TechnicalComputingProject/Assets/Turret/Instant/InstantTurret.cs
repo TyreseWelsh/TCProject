@@ -12,7 +12,7 @@ public class InstantTurret : MonoBehaviour
     GameObject projectileSpawn;
     bool fired;
     public int turretCost = 200;
-    public int turretDamage = 0;
+    public int turretDamage = 1;
 
     SphereCollider objCollider;
     List<GameObject> targetsInRange;

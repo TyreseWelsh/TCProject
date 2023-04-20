@@ -65,7 +65,6 @@ public class UnitScript : MonoBehaviour, IDamageable
         unitHealth--;
         if (unitHealth <= 0)
         {
-            gameManagerScript.ReduceNumEnemies();
             Destroy(gameObject);
         }
     }
@@ -93,5 +92,11 @@ public class UnitScript : MonoBehaviour, IDamageable
             }
             unitMovementScript.speed *= 1.2f;
         }
+    }
+
+    private void OnDestroy()
+    {
+        print("Enemy Destryed");
+        gameManagerScript.ReduceNumEnemies();
     }
 }

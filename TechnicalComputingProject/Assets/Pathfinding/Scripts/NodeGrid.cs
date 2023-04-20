@@ -11,7 +11,8 @@ using UnityEngine.UIElements;
 public class NodeGrid : MonoBehaviour
 {
     public bool drawAllGizmos = true;
-    LayerMask environmentMask;
+    [SerializeField]
+    LayerMask obstacleLayer;
     LayerMask placedObjMask;
     public Vector2 gridWSize;                                                                                                       // Grid size in world
     public Node [,] grid;
@@ -35,7 +36,7 @@ public class NodeGrid : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
-        environmentMask = LayerMask.GetMask("Environment");
+        //obstacleLayer = LayerMask.GetMask("Environment");
         placedObjMask = LayerMask.GetMask("PlacedObject");
 
         CreateGrid();
@@ -73,7 +74,7 @@ public class NodeGrid : MonoBehaviour
                 worldPoint = wBottomLeft + Vector3.right * (x * nodeSize + (nodeSize / 2))                                            // World position of node in grid
                     + Vector3.forward * (y * nodeSize + (nodeSize / 2));
 
-                bool walkable = !(Physics.CheckSphere(worldPoint, nodeSize / 2 - nodeSize / 3, environmentMask | placedObjMask));          // Setting if the current node is walkable or not using collisions      
+                bool walkable = !(Physics.CheckSphere(worldPoint, nodeSize / 2 - nodeSize / 3, obstacleLayer | placedObjMask));          // Setting if the current node is walkable or not using collisions      
 
                 bool occupied = Physics.CheckSphere(new Vector3(worldPoint.x, 1, worldPoint.z), nodeSize / 2 - nodeSize / 3);
 
@@ -97,7 +98,7 @@ public class NodeGrid : MonoBehaviour
         sw.Start();
 
         Node targetNode = NodeFromWorldPoint(endPos);
-        //print("start: " + startNode.nodeWPosition + " end: " + endNode.nodeWPosition);
+
         if (targetNode.walkable)
         {
             Heap<Node> openSet = new Heap<Node>(MaxSize);                                                                              // Creating list to store open nodes
@@ -111,11 +112,6 @@ public class NodeGrid : MonoBehaviour
 
                 closedSet.Add(currentNode);
 
-                //if (currentNode.id == endNode.id)                                                                                     // Have found the target node
-                //{
-                //    //print("Path found in: " + sw.ElapsedMilliseconds + " ms");
-                //    break;
-                //}
                 foreach (Node neighbourNode in GetNeighbours(currentNode))
                 {
                     if (!neighbourNode.walkable || closedSet.Exists(x => x.id == neighbourNode.id))                             // Checking if neighbour node is not walkable or is in the closed set
@@ -150,11 +146,6 @@ public class NodeGrid : MonoBehaviour
                     }
                 }
             }
-
-            //foreach (Node node in grid)
-            //{
-            //    UnityEngine.Debug.Log("id: " + node.id + " - cost: " + node.gCost);
-            //}
 
             flowFieldCreated = true;
             sw.Stop();
@@ -231,46 +222,19 @@ public class NodeGrid : MonoBehaviour
     {
         Gizmos.DrawWireCube(transform.position, new Vector3(gridWSize.x, 1, gridWSize.y));                                              // Creating the basic grid shape
 
-        //if (drawAllGizmos == false)                                                                                                      // Only draw path gizmos if drawAllGizmos = false
-        //{
-        //    if (path != null)
-        //    {
-        //        foreach (Node node in path)
-        //        {
-        //            Gizmos.color = Color.magenta;
-        //            Gizmos.DrawWireCube(node.nodeWPosition, Vector3.one * (nodeSize - 0.1f));                                               // Drawing the cubes with small gap inbetween
-
-        //        }
-        //    }
-        //}
         if (drawAllGizmos == true)                                                                                                           // Draw all gizmos if drawAllGizmos is true
         {
             if (grid != null)                                                                                                                // Checking if grid is valid
             {
                 foreach (Node node in grid)
                 {
-                    Gizmos.color = (node.walkable && !node.aboveOccupied) ? Color.green : Color.red;                                                               // Setting colour of cubes to show if walkable or not
+                    Gizmos.color = (node.walkable && !node.aboveOccupied) ? Color.green : Color.red;                                         // Setting colour of cubes to show if walkable or not
 
-                    //if (path != null)
-                    //{
-                    //    if (path.Exists(x => x.id == node.id))
-                    //    {
-                    //        Gizmos.color = Color.magenta;
-                    //    }
-                    //}
-
-                    //if (AINode.nodeWPosition == node.nodeWPosition)
-                    //{
-                    //    Gizmos.DrawWireCube(node.nodeWPosition, Vector3.one * (nodeSize - 0.1f));
-                    //    Gizmos.color = Color.cyan;
-                    //}
                     Gizmos.DrawWireCube(node.nodeWPosition, Vector3.one * (nodeSize - 0.1f));                                               // Drawing the cubes with small gap inbetween
 
                     if (currentPathFindingType == PathfindingType.FlowField && node.walkable && flowFieldCreated)
                     {
-                        //Gizmos.color = Color.yellow;
                         Handles.Label(new Vector3(node.nodeWPosition.x, 1, node.nodeWPosition.z), node.gCost.ToString());
-                        //Gizmos.DrawLine(new Vector3(node.parentNode.nodeWPosition.x, 1, node.parentNode.nodeWPosition.z), new Vector3(node.nodeWPosition.x, 1, node.nodeWPosition.z));
                     }
                 }
             }

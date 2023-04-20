@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerManager : MonoBehaviour, IDamageable
 {
@@ -32,7 +33,7 @@ public class PlayerManager : MonoBehaviour, IDamageable
 
     private void Start()
     {
-        playerHealth = 20;
+        playerHealth = 6;
         healthText.text = "Health: " + playerHealth;
 
         soulsText.text = "Souls: " + playerSouls;
@@ -102,5 +103,10 @@ public class PlayerManager : MonoBehaviour, IDamageable
     {
         playerHealth -= damage;
         healthText.text = "Health: " + playerHealth;
+
+        if(playerHealth <= 0)
+        {
+            SceneManager.LoadScene("EndScreen");
+        }
     }
 }

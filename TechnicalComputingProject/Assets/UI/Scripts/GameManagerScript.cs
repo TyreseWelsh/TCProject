@@ -29,7 +29,7 @@ public class GameManagerScript : MonoBehaviour
 
     private void Start()
     {
-        print(spawnController.enableSpawning);
+
     }
 
     public void ReduceNumEnemies()

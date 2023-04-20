@@ -20,7 +20,7 @@ public class BasicTurret : MonoBehaviour
     float projectileSpeed;
     bool fired;
     public int turretCost = 100;
-    public int turretDamage = 0;
+    public int turretDamage = 2;
 
     SphereCollider objCollider;
     List<GameObject> targetsInRange;
