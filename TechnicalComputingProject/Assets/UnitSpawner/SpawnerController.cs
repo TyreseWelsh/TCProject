@@ -11,26 +11,19 @@ public class SpawnerController : MonoBehaviour
     [SerializeField]
     GameObject spawnPoint;
 
-    [SerializeField]
-    int unitHealth;
-    [SerializeField]
-    float unitMoveSpeed;
+    public int unitHealth;
+    public float unitMoveSpeed;
 
-    [SerializeField]
-    float spawnRate;
+    public float spawnRate;
 
-    UnitManager unitManager;
     GameManagerScript gameManagerScript;
     public bool enableSpawning = true;
-    int unitsSpawned;
+    public int unitsSpawned;
     bool spawned;
 
     // Start is called before the first frame update
     void Start()
     {
-        GameObject playerManager = GameObject.Find("PlayerManager");
-        unitManager = playerManager.GetComponent<UnitManager>();
-
         GameObject gameManager = GameObject.Find("GameManager");
         gameManagerScript = gameManager.GetComponent<GameManagerScript>();
     }
@@ -60,7 +53,6 @@ public class SpawnerController : MonoBehaviour
         unitScript.Init(unitHealth, unitMoveSpeed);
         unitMovementScript.SetTarget(unitTarget);
 
-        unitManager.unitList.Add(newUnit);
         unitsSpawned++;
 
         spawned = false;

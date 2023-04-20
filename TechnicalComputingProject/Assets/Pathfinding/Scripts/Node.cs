@@ -23,13 +23,14 @@ public class Node : IHeapItem<Node>
     }
     public bool aboveOccupied = false;
 
-    public Node(int newId, bool newWalkable, Vector3 newNodeWPosition, int newGridXPos, int newGridYPos)
+    public Node(int newId, bool newWalkable, Vector3 newNodeWPosition, int newGridXPos, int newGridYPos, bool _occupied)
     {
         walkable = newWalkable;
         nodeWPosition = newNodeWPosition;
         gridXPos = newGridXPos;
         gridYPos = newGridYPos;
         id = newId;
+        aboveOccupied = _occupied;
     }
 
     int heapIndex;

@@ -61,7 +61,6 @@ public class BasicTurret : MonoBehaviour
                 }
             }
         }
-        print(targetsInRange.Count);
     }
 
     private void OnTriggerEnter(Collider other)

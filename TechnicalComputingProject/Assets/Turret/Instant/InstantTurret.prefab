@@ -274,7 +274,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc1d841a95736a14a95be805122a7f6f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fireRate: 1
+  fireRate: 3
   attack: {fileID: 3167033285586332012, guid: f85e040fa2c6fa04fb2c82180ed84467, type: 3}
   projectileSpawn: {fileID: 5368869834200120983}
   turretCost: 200

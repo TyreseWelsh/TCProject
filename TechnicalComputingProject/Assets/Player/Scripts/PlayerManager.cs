@@ -14,6 +14,8 @@ public class PlayerManager : MonoBehaviour, IDamageable
 
     bool soulsIncreased = false;
 
+    SpawnerController spawnerScript;
+
     public enum TurretTypes
     {
         Basic,
@@ -21,6 +23,12 @@ public class PlayerManager : MonoBehaviour, IDamageable
         Slow
     }
     public TurretTypes currentTurretType = TurretTypes.Basic;
+
+    private void Awake()
+    {
+        GameObject spawner = GameObject.Find("UnitSpawner");
+        spawnerScript = spawner.GetComponent<SpawnerController>();
+    }
 
     private void Start()
     {
@@ -44,7 +52,11 @@ public class PlayerManager : MonoBehaviour, IDamageable
         int soulIncreaseDelay = 1;
         yield return new WaitForSeconds(soulIncreaseDelay);
 
-        SetSouls(10);
+        if (spawnerScript.enableSpawning)
+        {
+            SetSouls(10);
+        }
+
         soulsIncreased = false;
     }
 

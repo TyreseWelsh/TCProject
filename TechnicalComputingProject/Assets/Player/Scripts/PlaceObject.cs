@@ -56,10 +56,10 @@ public class PlaceObject : MonoBehaviour
             {
                 SpawnObject(turretMeshes[(int)playerManagerScript.GetTurretType()], ray, hit, g0LayerMask, g1LayerMask, placedLayerMask);                                // Spawn turret of current type
             }
-            else if (Input.GetMouseButtonDown(1))
-            {
-                DeleteObject(ray, hit, placedLayerMask);
-            }
+            //else if (Input.GetMouseButtonDown(1))
+            //{
+            //    DeleteObject(ray, hit, placedLayerMask);
+            //}
         }
     }
 
@@ -97,7 +97,7 @@ public class PlaceObject : MonoBehaviour
                 if (nodeHit.aboveOccupied                                                                       // Returns true if another collision box overlaps with
                     || Physics.CheckSphere(CalculatePosition(hit), 0.1f, g0LayerMask))                          // occupied tile or checking sphere on ground1 layer
                 {
-                    Debug.Log("Object Detected");
+                    Debug.Log("Hit Detected");
                 }
                 else
                 {
@@ -105,13 +105,13 @@ public class PlaceObject : MonoBehaviour
                     switch (playerManagerScript.currentTurretType)
                     {
                         case (PlayerManager.TurretTypes.Basic):
-                            playerManagerScript.SetSouls(-50);
-                            break;
-                        case (PlayerManager.TurretTypes.Instant):
                             playerManagerScript.SetSouls(-100);
                             break;
+                        case (PlayerManager.TurretTypes.Instant):
+                            playerManagerScript.SetSouls(-300);
+                            break;
                         case (PlayerManager.TurretTypes.Slow):
-                            playerManagerScript.SetSouls(-20);
+                            playerManagerScript.SetSouls(-160);
                             break;
                     }
                     nodeHit.aboveOccupied = true;

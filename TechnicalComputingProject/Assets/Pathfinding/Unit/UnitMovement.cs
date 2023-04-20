@@ -8,38 +8,22 @@ using System;
 public class UnitMovement : MonoBehaviour
 {
     Transform target;
-    [SerializeField] float speed;
+    public float speed;
     Vector3[] path;
     int targetIndex;
 
     GameObject nodeGridObj;
     NodeGrid nodeGridScript;
 
-    PlayerManager playerManagerScript;
-
-    [SerializeField]
-    GameObject slowingEffect;
-
     private void Awake()
     {
         nodeGridObj = GameObject.Find("PathfindingGrid");
         nodeGridScript = nodeGridObj.GetComponent<NodeGrid>();
-
-        GameObject playerManager = GameObject.Find("PlayerManager");
-        playerManagerScript = playerManager.GetComponent<PlayerManager>();
     }
 
     private void Start()
     {
         GetPath();
-    }
-    private void Update()
-    {
-        if (transform.position.x == nodeGridScript.flowTargetTransform.position.x && transform.position.z == nodeGridScript.flowTargetTransform.position.z)
-        {
-            playerManagerScript.TakeDamage(2);
-            Destroy(gameObject);
-        }
     }
 
     public void GetPath()
@@ -47,12 +31,10 @@ public class UnitMovement : MonoBehaviour
         switch (nodeGridScript.currentPathFindingType)
         {
             case (NodeGrid.PathfindingType.AStar):
-                UnityEngine.Debug.Log("Following A*");
                 PathRequestManager.RequestPath(transform.position, target.position, OnPathFound);
                 break;
 
             case (NodeGrid.PathfindingType.FlowField):
-                UnityEngine.Debug.Log("Following flow field");
                 StopCoroutine("FollowFlowField");
                 StartCoroutine("FollowFlowField");
                 break;
@@ -72,7 +54,6 @@ public class UnitMovement : MonoBehaviour
     IEnumerator FollowFlowField()
     {
         Node currentNode = nodeGridScript.NodeFromWorldPoint(transform.position);
-        //Debug.Log(currentNode.nodeWPosition);
         Node endNode = nodeGridScript.NodeFromWorldPoint(nodeGridScript.flowTargetTransform.position);
 
         while (currentNode.id != endNode.id)
@@ -101,9 +82,7 @@ public class UnitMovement : MonoBehaviour
     {
         Vector3 currentWaypoint = path[0];
         while(true)
-        {
-            //print("unit: " + transform.position + " w: " + currentWaypoint);
-            
+        {           
             if (transform.position.x == currentWaypoint.x && transform.position.z == currentWaypoint.z)
             {
                 targetIndex++;
@@ -115,7 +94,6 @@ public class UnitMovement : MonoBehaviour
                 }
 
                 currentWaypoint = path[targetIndex];
-                //print(currentWaypoint.x + " " + currentWaypoint.y + " " + currentWaypoint.z);
             }
 
             transform.position = Vector3.MoveTowards(transform.position, new Vector3(currentWaypoint.x, 1, currentWaypoint.z), speed * Time.deltaTime);
@@ -132,31 +110,6 @@ public class UnitMovement : MonoBehaviour
     public void SetMoveSpeed(float _speed)
     {
         speed = _speed;
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if(other.GetComponent<SlowingTurret>() != null)
-        {
-            if(gameObject.transform.Find("SlowingEffect(Clone)") == null)
-            {
-                GameObject slowObject = Instantiate(slowingEffect, gameObject.transform.position, Quaternion.identity);
-                slowObject.transform.parent = gameObject.transform;
-            }
-            speed /= 1.2f;
-        }
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.GetComponent<SlowingTurret>() != null)
-        {
-            if(gameObject.transform.Find("SlowingEffect(Clone)") != null)
-            {
-                Destroy(gameObject.transform.Find("SlowingEffect(Clone)").gameObject);
-            }
-            speed *= 1.2f;
-        }
     }
 
     public void OnDrawGizmos()

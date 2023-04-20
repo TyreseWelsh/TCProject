@@ -46,6 +46,11 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    public void GoToInstructions()
+    {
+        SceneManager.LoadScene("InstructionsScene");
+    }
+
     public void StartGame()
     {
         SceneManager.LoadScene("Level1");

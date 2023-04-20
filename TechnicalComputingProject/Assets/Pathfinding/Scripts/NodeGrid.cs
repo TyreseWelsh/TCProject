@@ -17,7 +17,6 @@ public class NodeGrid : MonoBehaviour
     public Node [,] grid;
     public float nodeSize;
     public Vector2Int gridLSize = new Vector2Int(0, 0);                                                                                    // Grid local size
-    public Transform AIChar;
 
     public List<Node> path;
 
@@ -74,8 +73,11 @@ public class NodeGrid : MonoBehaviour
                 worldPoint = wBottomLeft + Vector3.right * (x * nodeSize + (nodeSize / 2))                                            // World position of node in grid
                     + Vector3.forward * (y * nodeSize + (nodeSize / 2));
 
-                bool walkable = !(Physics.CheckSphere(worldPoint, (nodeSize / 2 - nodeSize / 3), environmentMask | placedObjMask));          // Setting if the current node is walkable or not using collisions      
-                grid[x, y] = new Node(nodeID, walkable, worldPoint, x, y);                                                                            // Create a new node at this index with the right variables
+                bool walkable = !(Physics.CheckSphere(worldPoint, nodeSize / 2 - nodeSize / 3, environmentMask | placedObjMask));          // Setting if the current node is walkable or not using collisions      
+
+                bool occupied = Physics.CheckSphere(new Vector3(worldPoint.x, 1, worldPoint.z), nodeSize / 2 - nodeSize / 3);
+
+                grid[x, y] = new Node(nodeID, walkable, worldPoint, x, y, occupied);                                                                            // Create a new node at this index with the right variables
                 nodeID++;
             }
         }
@@ -146,23 +148,6 @@ public class NodeGrid : MonoBehaviour
                     {
                         openSet.Add(neighbourNode);                                                                         // Adding chosen valid neighbours node to open list
                     }
-
-                    //if (newMovementCostToNeighbour < neighbourNode.gCost || !openSet.Contains(neighbourNode))     // Checking if new neighbour G cost is less than its current cost to see if it needs
-                    //{                                                                                                           // to be reduced or is not in the open list (not already going to be checked)
-                    //    UnityEngine.Debug.Log(newMovementCostToNeighbour);
-                    //    neighbourNode.gCost = newMovementCostToNeighbour;                                                       // Set current G cost to new G cost (better path from start node found)
-                    //    //neighbourNode.hCost = GetDistance(neighbourNode, endNode);                                              // Set H cost as distance to end node
-                    //    neighbourNode.parentNode = currentNode;                                                                 // Setting parent node to look back on
-
-                    //    if (!openSet.Contains(neighbourNode))
-                    //    {
-                    //        openSet.Add(neighbourNode);                                                                         // Adding chosen valid neighbours node to open list
-                    //    }
-                    //    else
-                    //    {
-                    //        openSet.UpdateItem(neighbourNode);
-                    //    }
-                    //}
                 }
             }
 
@@ -262,11 +247,9 @@ public class NodeGrid : MonoBehaviour
         {
             if (grid != null)                                                                                                                // Checking if grid is valid
             {
-                //Node AINode = NodeFromWorldPoint(AIChar.position);
-
                 foreach (Node node in grid)
                 {
-                    Gizmos.color = (node.walkable) ? Color.green : Color.red;                                                               // Setting colour of cubes to show if walkable or not
+                    Gizmos.color = (node.walkable && !node.aboveOccupied) ? Color.green : Color.red;                                                               // Setting colour of cubes to show if walkable or not
 
                     //if (path != null)
                     //{

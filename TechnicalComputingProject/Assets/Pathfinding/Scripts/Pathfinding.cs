@@ -18,21 +18,6 @@ public class Pathfinding : MonoBehaviour
         pRequestManager = GetComponent<PathRequestManager>();
     }
 
-    //public Transform AISeekerTf;
-    //public Transform targetTf;
-
-    // Update is called once per frame
-    //void Update()
-    //{
-        //if (Input.GetKeyDown(KeyCode.N))                                                                                                 // Update Grid when Key is pressed
-        //{
-        //    if (nodeGrid.gridLSize.x > 0 && nodeGrid.gridLSize.y > 0)
-        //    {
-        //        FindPath(AISeekerTf.position, targetTf.position);
-        //    }
-        //}
-    //}
-
     public void StartFindPath(Vector3 startPos, Vector3 targetPos)
     {                                                                                                                      // A* Pathfinding (Individual)
         StartCoroutine(FindDirectPath(startPos, targetPos));
